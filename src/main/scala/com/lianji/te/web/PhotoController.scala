@@ -57,6 +57,8 @@ class PhotoController @Autowired()(
     val photo = photoService
       .getPhoto(req.name, req.description, req.file.getInputStream)
     log.info("created photo = {}", photo)
+    val savedPhoto = photoRepository.save(photo)
+    log.info("saved photo = {}", savedPhoto)
     new ResponseEntity("Successfully created photo.", HttpStatus.OK)
   }
 
