@@ -25,8 +25,8 @@ class Photo(
   @BeanProperty @(NotEmpty@field) var make: String,
   @BeanProperty @(NotEmpty@field) var copyright: String,
   @BeanProperty @(NotEmpty@field) var isoSpeedRatings: Integer,
-  @BeanProperty @(NotEmpty@field) var apetureValue: String,
-  @BeanProperty @(NotEmpty@field) var maxApetureValue: String,
+  @BeanProperty @(NotEmpty@field) var apertureValue: String,
+  @BeanProperty @(NotEmpty@field) var maxApertureValue: String,
   @BeanProperty @(NotEmpty@field) var focalLength: String,
   @BeanProperty @(NotEmpty@field) var url: String
 ) {

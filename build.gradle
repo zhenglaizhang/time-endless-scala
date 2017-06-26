@@ -29,6 +29,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.thymeleaf:thymeleaf-spring4")
     compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+    compile group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.10.1'
     testCompile("org.springframework.boot:spring-boot-starter-test")
     compile("com.h2database:h2")
     compile("org.scala-lang:scala-library:2.12.2")
