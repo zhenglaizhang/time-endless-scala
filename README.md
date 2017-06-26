@@ -26,3 +26,16 @@ Start App
 ----
 ~re-start
 ----
+
+## TODO
+
+- `start.spring.io` (switch to `full version`)
+- JPA
+- H2
+- Thymeleaf
+- Actuator
+- Remote Shell (CRaSH Shell Integration)
+- DevTools
+- Security
+- Test
+- `banner.txt`

@@ -9,14 +9,15 @@ import scala.beans.BeanProperty
 
 import org.hibernate.validator.constraints.NotEmpty
 
+// JPA Entity (domain object)
 @Entity
 case class Photo(
-  @(Id@field) @(GeneratedValue@field) @BeanProperty var id: Long,
+  @BeanProperty @(Id@field) @(GeneratedValue@field) var id: Long,
   @BeanProperty @(NotEmpty@field) var name: String,
   @BeanProperty @(NotEmpty@field) var description: String,
   @BeanProperty var dateTimeOriginal: LocalDate,
   @BeanProperty var width: Integer,
-  @BeanProperty var height: Integer,
+  @BeanProperty var height: Integern,
   @BeanProperty @(NotEmpty@field) var exposureTime: String,
   @BeanProperty @(NotEmpty@field) var fNumber: String,
   @BeanProperty @(NotEmpty@field) var model: String,
@@ -28,5 +29,8 @@ case class Photo(
   @BeanProperty @(NotEmpty@field) var focalLength: String,
   @BeanProperty @(NotEmpty@field) var url: String
 ) {
+  // required ctor.
   def this() = this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
+
+  // convenient ctors...
 }
