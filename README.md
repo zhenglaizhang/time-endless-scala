@@ -1,15 +1,11 @@
-= spring-boot-scala-web
-A sample web application using spring-boot and Scala
+## Time endless web app
 
 
-=== Using gradle as the build tool:
+### Dev
 
-Build using `./gradlew build`
-Run using `./gradlew bootRun`
-OR
-Run using: `java -jar build/libs/spring-boot-scala-web-0.3.0.jar`
-
-A url listing the hotels is at http://localhost:8080/hotels[http://localhost:8080/hotels]
+- `./gradlew build`
+- `./gradlew clean bootRun`
+- `java -jar build/libs/time-endless-app-0.3.0.jar`
 
 === Using sbt as the build tool
 

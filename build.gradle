@@ -42,6 +42,7 @@ dependencies {
     H2 database implementation
     no need to know the exact kind of a database to which we will connect at the compile time
    Spring Boot will autoconfigure the needed settings and create appropriate beans once it detects the presence of the org.h2.Driver class in the classpath when the application is launched.
+   Put the right classes in the class path
      */
     runtime("com.h2database:h2")
 
