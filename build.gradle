@@ -25,6 +25,13 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+
+    //  minimize the boilerplate code to create restful resources
+    /*
+    will also bring in spring-hateoas library support, which gives us nice ALPS metadata, such as a _links object. This can be very helpful when building an API-driven UI, which can deduce the navigational capabilities from the metadata and present them appropriately.
+     */
+    compile("org.springframework.boot:spring-boot-starter-data-rest")
+
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-jdbc")
 
