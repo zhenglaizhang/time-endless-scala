@@ -1,6 +1,9 @@
 package com.lianji.te
 
-import org.apache.commons.logging.LogFactory
+import javax.sql.DataSource
+
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.core.annotation.Order
 
@@ -15,8 +18,23 @@ them
 
 @Order(12)
 class StartupRunner extends CommandLineRunner {
-  private[this] val log = LogFactory.getLog(getClass)
+  private[this] val log = LoggerFactory.getLogger(getClass)
 
-  override def run(args: String*) = log.info("echo...")
+  /*
+ Spring Boot recognized that we’ve autowired a DataSource dependency and automatically created one initializing the in-memory H2 data store.
+
+@Bean tells Spring 'here is an instance of this class, please keep hold of it and give it back to me when I ask'.
+Annotating@Bean only register this service as a bean(i.e a kind of Object) in spring application context. In simple word, it is just registration but nothing.
+
+@Autowired says 'please give me an instance of this class, for example, one that I created with an @Bean annotation earlier'.
+Annotating a variable with @Autowired inject a BookingService bean(i.e Object) from Spring Application Context.
+   */
+  @Autowired
+  private var ds: DataSource = _
+
+  @throws[Exception]
+  override def run(args: String*) = {
+    log.info("Datasource: {}", ds.toString)
+  }
 }
 
