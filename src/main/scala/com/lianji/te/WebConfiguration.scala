@@ -1,11 +1,13 @@
 package com.lianji.te
 
+import java.util.concurrent.TimeUnit
 import javax.servlet.Filter
 
 import com.lianji.te.domain.BookFormatter
 import com.lianji.te.service.BookRepository
 import org.apache.catalina.filters.RemoteIpFilter
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.embedded.{ ConfigurableEmbeddedServletContainer, EmbeddedServletContainerCustomizer }
 import org.springframework.context.annotation.{ Bean, Configuration }
 import org.springframework.format.FormatterRegistry
 import org.springframework.http.converter.ByteArrayHttpMessageConverter
@@ -95,5 +97,20 @@ there is no guarantee that our method can get called in any particular order
       .addResourceLocations("classpath:/")
       .setCachePeriod(1000)
     // http://localhost:8080/internal/application.properties
+  }
+
+
+  /*
+  D uring the application startup, the Spring Boot autoconfiguration detects the presence of
+the customizer and invokes the customize(…) method, passing the reference to a servlet
+container. In our specific case, we actually get an instance of the
+TomcatEmbeddedServletContainerFactory implementation; but depending on the kind of
+servlet container that is used, such as Jetty, or Undertow, the implementation will vary
+   */
+  @Bean
+  def embeddedServletContainerCustomizer = new EmbeddedServletContainerCustomizer {
+    // set session timeout
+    override def customize(container: ConfigurableEmbeddedServletContainer) =
+      container.setSessionTimeout(1, TimeUnit.MINUTES)
   }
 }

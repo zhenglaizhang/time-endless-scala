@@ -1,6 +1,7 @@
 package com.lianji.te.web
 
 import java.lang
+import javax.servlet.http.HttpServletRequest
 
 import com.lianji.te.domain.{ Book, Isbn }
 import com.lianji.te.service.BookRepository
@@ -26,4 +27,7 @@ class BookController {
 
   @GetMapping(Array("/{isbn}/reviewers"))
   def getReviewers(@PathVariable("isbn") book: Book) = book.getReviewers
+
+  @GetMapping(Array("/session"))
+  def getSessionId(req: HttpServletRequest) = req.getSession.getId
 }
