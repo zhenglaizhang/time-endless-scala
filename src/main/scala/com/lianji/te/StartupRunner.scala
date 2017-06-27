@@ -2,6 +2,7 @@ package com.lianji.te
 
 import javax.sql.DataSource
 
+import com.lianji.te.service.{ BookRepository, PhotoRepository }
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
@@ -32,9 +33,17 @@ Annotating a variable with @Autowired inject a BookingService bean(i.e Object) f
   @Autowired
   private var ds: DataSource = _
 
+  @Autowired
+  private var bookRepository: BookRepository = _
+
+  @Autowired
+  private var photoRepository: PhotoRepository = _
+
   @throws[Exception]
   override def run(args: String*) = {
     log.info("Datasource: {}", ds.toString)
+    log.info("book counts: {}", bookRepository.count())
+    log.info("photo counts: {}", photoRepository.count())
   }
 }
 

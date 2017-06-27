@@ -4,7 +4,7 @@ import java.io.InputStream
 
 import com.drew.imaging.ImageMetadataReader
 import com.drew.metadata.exif.{ ExifDirectoryBase, ExifIFD0Directory, ExifSubIFDDescriptor, ExifSubIFDDirectory }
-import com.lianji.te.domain.Photo
+import com.lianji.te.domain.{ Album, Photo }
 import org.springframework.stereotype.Service
 
 @Service

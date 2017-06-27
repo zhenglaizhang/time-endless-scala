@@ -27,7 +27,8 @@ case class Photo(
   @BeanProperty @(NotEmpty@field) var apertureValue: String,
   @BeanProperty @(NotEmpty@field) var maxApertureValue: String,
   @BeanProperty @(NotEmpty@field) var focalLength: String,
-  @BeanProperty @(NotEmpty@field) var url: String
+  @BeanProperty @(NotEmpty@field) var url: String//,
+//  @BeanProperty @(NotEmpty@field) @OneToOne var album: Album
 ) {
   // required ctor.
   def this() = this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
