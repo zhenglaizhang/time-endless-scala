@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation._
 
 @Controller
 @RequestMapping(Array("/hotels"))
-class HotelController @Autowired()(private val hotelRepository: HotelRepository) {
+class HotelController @Autowired()(
+  private val hotelRepository: HotelRepository
+) {
 
   @GetMapping
   def list(model: Model) = {

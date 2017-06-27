@@ -17,7 +17,7 @@ case class Photo(
   @BeanProperty @(NotEmpty@field) var description: String,
   @BeanProperty var dateTimeOriginal: LocalDate,
   @BeanProperty var width: Integer,
-  @BeanProperty var height: Integern,
+  @BeanProperty var height: Integer,
   @BeanProperty @(NotEmpty@field) var exposureTime: String,
   @BeanProperty @(NotEmpty@field) var fNumber: String,
   @BeanProperty @(NotEmpty@field) var model: String,

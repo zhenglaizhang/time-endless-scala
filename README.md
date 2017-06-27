@@ -39,3 +39,4 @@ Start App
 - Security
 - Test
 - `banner.txt`
+- check `spring.provides` to see real artifacts provided in each starter
