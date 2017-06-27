@@ -2,7 +2,7 @@ package com.lianji.te.web
 
 import java.lang
 
-import com.lianji.te.domain.Book
+import com.lianji.te.domain.{ Book, Isbn }
 import com.lianji.te.service.BookRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation._
@@ -19,7 +19,8 @@ class BookController {
   @GetMapping
   def getAllBooks: lang.Iterable[Book] = bookRepository.findAll()
 
-//  @RequestMapping(value = Array("/{isbn}"), method = Array(RequestMethod.GET))
+  // the IsbnEditor is indeed at work, creating an instance of an Isbn class object from the {isbn} parameter
+  //  @RequestMapping(value = Array("/{isbn}"), method = Array(RequestMethod.GET))
   @GetMapping(Array("/{isbn}"))
-  def getBook(@PathVariable isbn: String): Book = bookRepository.findBookByIsbn(isbn)
+  def getBook(@PathVariable isbn: Isbn): Book = bookRepository.findBookByIsbn(isbn.getIsbn)
 }

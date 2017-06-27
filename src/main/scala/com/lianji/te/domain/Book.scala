@@ -1,10 +1,41 @@
 package com.lianji.te.domain
 
+import java.beans.PropertyEditorSupport
 import java.lang.Long
 import java.util
 import javax.persistence._
 
 import scala.beans.BeanProperty
+
+import org.springframework.util.StringUtils
+import org.springframework.web.bind.WebDataBinder
+
+class Isbn(
+  @BeanProperty var isbn: String = null
+)
+
+class IsbnEditor() extends PropertyEditorSupport {
+  @throws[IllegalArgumentException]
+  override def setAsText(text: String) = {
+    if (StringUtils.hasText(text)) {
+      setValue(new Isbn(text.trim))
+    } else {
+      setValue(null)
+    }
+  }
+
+  override def getAsText = {
+    val isbn = getValue.asInstanceOf[Isbn]
+    if (isbn != null) {isbn.getIsbn}
+    else {""}
+  }
+
+  // PropertyEditor is not thread safe
+  // So here we create a new instance of our custom editors for every web request and register them with WebDataBinder.
+  def initBinder(binder: WebDataBinder) = {
+    binder.registerCustomEditor(classOf[Isbn], new IsbnEditor)
+  }
+}
 
 // @Entity indicates that the annotated class should be mapped to a database table
 //  every entity class should have a default protected constructor, which is needed for automated instantiation and Hibernate interactions
