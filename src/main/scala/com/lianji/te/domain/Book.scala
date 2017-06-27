@@ -6,10 +6,10 @@ import java.util
 import javax.persistence._
 
 import scala.beans.BeanProperty
-import scala.collection.mutable
 
 import org.springframework.util.StringUtils
 import org.springframework.web.bind.WebDataBinder
+import org.springframework.web.bind.annotation.InitBinder
 
 class Isbn(
   @BeanProperty var isbn: String = null
@@ -33,6 +33,7 @@ class IsbnEditor() extends PropertyEditorSupport {
 
   // PropertyEditor is not thread safe
   // So here we create a new instance of our custom editors for every web request and register them with WebDataBinder.
+  @InitBinder
   def initBinder(binder: WebDataBinder) = {
     binder.registerCustomEditor(classOf[Isbn], new IsbnEditor)
   }
