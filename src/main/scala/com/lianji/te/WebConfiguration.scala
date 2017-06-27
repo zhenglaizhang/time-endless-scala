@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.{ Bean, Configuration }
 import org.springframework.format.FormatterRegistry
 import org.springframework.http.converter.ByteArrayHttpMessageConverter
-import org.springframework.web.servlet.config.annotation.{ InterceptorRegistry, WebMvcConfigurerAdapter }
+import org.springframework.web.servlet.config.annotation.{ InterceptorRegistry, PathMatchConfigurer, WebMvcConfigurerAdapter }
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
 
 /*
@@ -78,5 +78,12 @@ there is no guarantee that our method can get called in any particular order
 
   override def addFormatters(registry: FormatterRegistry) = {
     registry.addFormatter(new BookFormatter(bookRepository))
+  }
+
+
+  override def configurePathMatch(configurer: PathMatchConfigurer) = {
+    configurer.setUseSuffixPatternMatch(false) // not use the suffix pattern match of .*
+      .setUseTrailingSlashMatch(true)          // not to strip the values after the dot when parsing the parameters
+    // support: http://localhost:8080/books/978-1-78528-415-1.1/reviewers
   }
 }
