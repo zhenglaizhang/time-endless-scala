@@ -36,3 +36,4 @@ Start App
 - Test
 - `banner.txt`
 - check `spring.provides` to see real artifacts provided in each starter
+- integrate with jdbc template
