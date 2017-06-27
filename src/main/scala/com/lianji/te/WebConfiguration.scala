@@ -2,8 +2,12 @@ package com.lianji.te
 
 import javax.servlet.Filter
 
+import com.lianji.te.domain.BookFormatter
+import com.lianji.te.service.BookRepository
 import org.apache.catalina.filters.RemoteIpFilter
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.{ Bean, Configuration }
+import org.springframework.format.FormatterRegistry
 import org.springframework.http.converter.ByteArrayHttpMessageConverter
 import org.springframework.web.servlet.config.annotation.{ InterceptorRegistry, WebMvcConfigurerAdapter }
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
@@ -67,4 +71,12 @@ there is no guarantee that our method can get called in any particular order
 //    converters.clear()
 //    converters.add(new ByteArrayHttpMessageConverter)
 //  }
+
+
+  @Autowired
+  private var bookRepository: BookRepository = _
+
+  override def addFormatters(registry: FormatterRegistry) = {
+    registry.addFormatter(new BookFormatter(bookRepository))
+  }
 }

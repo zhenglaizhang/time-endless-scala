@@ -15,7 +15,7 @@ class BookController {
   @Autowired
   private var bookRepository: BookRepository = _
 
-//  @RequestMapping(method = Array(RequestMethod.GET))
+  //  @RequestMapping(method = Array(RequestMethod.GET))
   @GetMapping
   def getAllBooks: lang.Iterable[Book] = bookRepository.findAll()
 
@@ -23,4 +23,7 @@ class BookController {
   //  @RequestMapping(value = Array("/{isbn}"), method = Array(RequestMethod.GET))
   @GetMapping(Array("/{isbn}"))
   def getBook(@PathVariable isbn: Isbn): Book = bookRepository.findBookByIsbn(isbn.getIsbn)
+
+  @GetMapping(Array("/{isbn}/reviewers"))
+  def getReviewers(@PathVariable("isbn") book: Book) = book.getReviewers
 }
