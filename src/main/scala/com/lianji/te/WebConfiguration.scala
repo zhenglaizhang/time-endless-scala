@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.{ Bean, Configuration }
 import org.springframework.format.FormatterRegistry
 import org.springframework.http.converter.ByteArrayHttpMessageConverter
-import org.springframework.web.servlet.config.annotation.{ InterceptorRegistry, PathMatchConfigurer, WebMvcConfigurerAdapter }
+import org.springframework.web.servlet.config.annotation.{ InterceptorRegistry, PathMatchConfigurer, ResourceHandlerRegistry, WebMvcConfigurerAdapter }
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
 
 /*
@@ -85,5 +85,15 @@ there is no guarantee that our method can get called in any particular order
     configurer.setUseSuffixPatternMatch(false) // not use the suffix pattern match of .*
       .setUseTrailingSlashMatch(true)          // not to strip the values after the dot when parsing the parameters
     // support: http://localhost:8080/books/978-1-78528-415-1.1/reviewers
+  }
+
+  /*
+  define custom mappings for static resource URLs and connect them with the resources on the file system or application classpath
+   */
+  override def addResourceHandlers(registry: ResourceHandlerRegistry) =  {
+    registry.addResourceHandler("/internal/**")
+      .addResourceLocations("classpath:/")
+      .setCachePeriod(1000)
+    // http://localhost:8080/internal/application.properties
   }
 }
