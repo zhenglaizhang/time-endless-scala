@@ -57,4 +57,6 @@ dependencies {
 
     compile("org.scala-lang:scala-library:2.12.2")
     compile("org.webjars:bootstrap:3.3.7")
+    compile group: 'org.webjars', name: 'jquery', version: '3.2.1'
+
 }
