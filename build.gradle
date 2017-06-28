@@ -1,3 +1,10 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '1.5.4.RELEASE'
 }
@@ -5,17 +12,27 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'scala'
 //apply plugin: 'eclipse'
+apply plugin: 'application'
 apply plugin: 'idea'
+apply plugin: 'docker'
 
 ext {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 }
 
-
 jar {
     baseName = 'time-endless-app'
     version = '0.3.0'
+}
+
+distDocker {
+    maintainer "Zhenglai Zhang<zhenglaizhang@hotmail.com>"
+    tag "purestoneguy/time-endless-app
+    push true
+    exposePort 8080
+    exposePort 8443
+    addFile file("${System.properties['user.home']}/.keystore"), "/root/"
 }
 
 repositories {
