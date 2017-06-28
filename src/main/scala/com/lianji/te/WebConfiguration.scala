@@ -7,6 +7,7 @@ import javax.servlet.Filter
 
 import scala.beans.BeanProperty
 
+import com.lianji.dbcount.DbCountRunner
 import com.lianji.te.domain.BookFormatter
 import com.lianji.te.service.BookRepository
 import org.apache.catalina.connector.Connector
@@ -16,9 +17,11 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.boot.context.embedded.{ ConfigurableEmbeddedServletContainer, EmbeddedServletContainerCustomizer }
 import org.springframework.boot.context.properties.{ ConfigurationProperties, EnableConfigurationProperties }
 import org.springframework.context.annotation.{ Bean, Configuration, PropertySource }
+import org.springframework.data.repository.CrudRepository
 import org.springframework.format.FormatterRegistry
 import org.springframework.http.converter.ByteArrayHttpMessageConverter
-import org.springframework.web.servlet.config.annotation.{ InterceptorRegistry, PathMatchConfigurer, ResourceHandlerRegistry, WebMvcConfigurerAdapter }
+import org.springframework.web.servlet.config.annotation.{ InterceptorRegistry, PathMatchConfigurer, ResourceHandlerRegistry,
+WebMvcConfigurerAdapter }
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
 
 /*
@@ -39,8 +42,8 @@ values get bound to an internal Spring Boot class: ServerProperties.
 @Configuration
 class WebConfiguration extends WebMvcConfigurerAdapter {
 
-//  @Bean
-  def servletContainer(properties:TomcatSslConnectorProperties) = {
+  //  @Bean
+  def servletContainer(properties: TomcatSslConnectorProperties) = {
     val tomcat = new TomcatEmbeddedServletContainerFactory()
     tomcat.addAdditionalTomcatConnectors(createSslConnector(properties))
     tomcat
@@ -92,7 +95,8 @@ there is no guarantee that our method can get called in any particular order
 //    converters.add(new ByteArrayHttpMessageConverter)
 
   /*
-  . This method gets invoked after all the WebMvcConfigurers get called for configureMessageConverters and the list of converters is fully populated
+  . This method gets invoked after all the WebMvcConfigurers get called for configureMessageConverters and the list of converters is
+  fully populated
    */
   // more control
 //  override def extendMessageConverters(converters: util.List[HttpMessageConverter[_]]) = {
@@ -118,7 +122,7 @@ there is no guarantee that our method can get called in any particular order
   /*
   define custom mappings for static resource URLs and connect them with the resources on the file system or application classpath
    */
-  override def addResourceHandlers(registry: ResourceHandlerRegistry) =  {
+  override def addResourceHandlers(registry: ResourceHandlerRegistry) = {
     registry.addResourceHandler("/internal/**")
       .addResourceLocations("classpath:/")
       .setCachePeriod(1000)
@@ -138,6 +142,13 @@ servlet container that is used, such as Jetty, or Undertow, the implementation w
     // set session timeout
     override def customize(container: ConfigurableEmbeddedServletContainer) =
       container.setSessionTimeout(1, TimeUnit.MINUTES)
+  }
+
+  @Bean
+  def dbCountRunner(repositories: java.util.Collection[CrudRepository[_, _]]) = new DbCountRunner(repositories) {
+    override def run(args: String*) = {
+      log.info("Manually declared DbCountRunner")
+    }
   }
 }
 
@@ -163,7 +174,7 @@ class TomcatSslConnectorProperties {
 
   def configureConnector(connector: Connector) = {
     if (port != null) connector.setPort(port)
-    if (secure != null) { connector.setSecure(secure)}
+    if (secure != null) {connector.setSecure(secure)}
     if (schema != null) {connector.setScheme(schema)}
     if (ssl != null) {connector.setProperty("SSLEnabled", ssl.toString)}
     if (keystore != null && keystore.exists()) {

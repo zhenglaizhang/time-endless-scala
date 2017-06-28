@@ -63,6 +63,7 @@ dependencies {
 
     // for demo purpose only, just include dependency only
     // Gradle actually creates a separate artifact JAR for us but we don’t have to publish it anywhere
+    // On the inclusion of the jar in the application classpath, the DbCountRunner bean will be created automatically and added to the application context.
     compile project(':db-count-starter')
 
 }
