@@ -59,6 +59,8 @@ dependencies {
     compile("org.webjars:bootstrap:3.3.7")
     compile group: 'org.webjars', name: 'jquery', version: '3.2.1'
 
+    compile group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '2.6.1'
+
     // for demo purpose only, just include dependency only
     // Gradle actually creates a separate artifact JAR for us but we don’t have to publish it anywhere
     compile project(':db-count-starter')
