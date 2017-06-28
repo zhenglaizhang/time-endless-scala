@@ -1,14 +1,21 @@
 package com.lianji.te
 
+import java.io.File
+import java.lang.Boolean
 import java.util.concurrent.TimeUnit
 import javax.servlet.Filter
 
+import scala.beans.BeanProperty
+
 import com.lianji.te.domain.BookFormatter
 import com.lianji.te.service.BookRepository
+import org.apache.catalina.connector.Connector
 import org.apache.catalina.filters.RemoteIpFilter
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.{ ConfigurableEmbeddedServletContainer, EmbeddedServletContainerCustomizer }
-import org.springframework.context.annotation.{ Bean, Configuration }
+import org.springframework.boot.context.properties.{ ConfigurationProperties, EnableConfigurationProperties }
+import org.springframework.context.annotation.{ Bean, Configuration, PropertySource }
 import org.springframework.format.FormatterRegistry
 import org.springframework.http.converter.ByteArrayHttpMessageConverter
 import org.springframework.web.servlet.config.annotation.{ InterceptorRegistry, PathMatchConfigurer, ResourceHandlerRegistry, WebMvcConfigurerAdapter }
@@ -22,9 +29,28 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
 
 Servlet Filters are a part of the Servlet API and have really nothing to do with
 Spring—besides being automatically added in the filter chain
+
+Spring Boot already exposes many properties to configure the
+application settings, including a whole set of settings for the server configuration. These
+values get bound to an internal Spring Boot class: ServerProperties.
  */
+@PropertySource(Array("classpath:/tomcat.https.properties"))
+@EnableConfigurationProperties(Array(classOf[TomcatSslConnectorProperties]))
 @Configuration
 class WebConfiguration extends WebMvcConfigurerAdapter {
+
+//  @Bean
+  def servletContainer(properties:TomcatSslConnectorProperties) = {
+    val tomcat = new TomcatEmbeddedServletContainerFactory()
+    tomcat.addAdditionalTomcatConnectors(createSslConnector(properties))
+    tomcat
+  }
+
+  private[this] def createSslConnector(properties: TomcatSslConnectorProperties) = {
+    val connector = new Connector()
+    properties.configureConnector(connector)
+    connector
+  }
 
   // When Spring Boot detects all the beans of javax.servlet.Filter, it will add them to the filter chain automatically
   @Bean
@@ -112,5 +138,37 @@ servlet container that is used, such as Jetty, or Undertow, the implementation w
     // set session timeout
     override def customize(container: ConfigurableEmbeddedServletContainer) =
       container.setSessionTimeout(1, TimeUnit.MINUTES)
+  }
+}
+
+@ConfigurationProperties(prefix = "custom.tomcat.https")
+class TomcatSslConnectorProperties {
+  @BeanProperty
+  var port: Integer = _
+
+  @BeanProperty
+  var ssl: Boolean = true
+
+  @BeanProperty
+  var secure: Boolean = true
+
+  @BeanProperty
+  var schema: String = "https"
+
+  @BeanProperty
+  var keystore: File = _
+
+  @BeanProperty
+  var keystorePassword: String = _
+
+  def configureConnector(connector: Connector) = {
+    if (port != null) connector.setPort(port)
+    if (secure != null) { connector.setSecure(secure)}
+    if (schema != null) {connector.setScheme(schema)}
+    if (ssl != null) {connector.setProperty("SSLEnabled", ssl.toString)}
+    if (keystore != null && keystore.exists()) {
+      connector.setProperty("keystoreFile", keystore.getAbsolutePath)
+      connector.setProperty("keystorePassword", keystorePassword)
+    }
   }
 }

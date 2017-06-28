@@ -38,3 +38,11 @@ Start App
 - check `spring.provides` to see real artifacts provided in each starter
 - integrate with jdbc template
 - tomcat vs jetty vs Undertow
+- fix tomcat https
+
+## Others
+
+```
+# generate certificate store
+$JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg RSA
+```
