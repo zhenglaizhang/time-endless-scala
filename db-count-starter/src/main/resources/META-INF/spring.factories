@@ -1,2 +1,2 @@
 # tell Spring Boot that our newly created JAR artifact contains the autoconfiguration classes
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.lianji.dbcount.DbCountAutoConfiguration
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.lianji.dbcount.DbCountAutoConfiguration

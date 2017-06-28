@@ -7,7 +7,7 @@ import javax.servlet.Filter
 
 import scala.beans.BeanProperty
 
-import com.lianji.dbcount.DbCountRunner
+import com.lianji.dbcount.{ DbCountRunner, EnableDbCounting }
 import com.lianji.te.domain.BookFormatter
 import com.lianji.te.service.BookRepository
 import org.apache.catalina.connector.Connector
@@ -20,8 +20,7 @@ import org.springframework.context.annotation.{ Bean, Configuration, PropertySou
 import org.springframework.data.repository.CrudRepository
 import org.springframework.format.FormatterRegistry
 import org.springframework.http.converter.ByteArrayHttpMessageConverter
-import org.springframework.web.servlet.config.annotation.{ InterceptorRegistry, PathMatchConfigurer, ResourceHandlerRegistry,
-WebMvcConfigurerAdapter }
+import org.springframework.web.servlet.config.annotation.{ InterceptorRegistry, PathMatchConfigurer, ResourceHandlerRegistry, WebMvcConfigurerAdapter }
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
 
 /*
@@ -144,12 +143,12 @@ servlet container that is used, such as Jetty, or Undertow, the implementation w
       container.setSessionTimeout(1, TimeUnit.MINUTES)
   }
 
-  @Bean
-  def dbCountRunner(repositories: java.util.Collection[CrudRepository[_, _]]) = new DbCountRunner(repositories) {
-    override def run(args: String*) = {
-      log.info("Manually declared DbCountRunner")
-    }
-  }
+//  @Bean
+//  def dbCountRunner(repositories: java.util.Collection[CrudRepository[_, _]]) = new DbCountRunner(repositories) {
+//    override def run(args: String*) = {
+//      log.info("Manually declared DbCountRunner")
+//    }
+//  }
 }
 
 @ConfigurationProperties(prefix = "custom.tomcat.https")

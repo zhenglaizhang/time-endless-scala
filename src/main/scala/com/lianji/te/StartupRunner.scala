@@ -6,6 +6,7 @@ import com.lianji.te.service.{ BookRepository, PhotoRepository }
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
+import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.scheduling.annotation.Scheduled
 
@@ -16,9 +17,16 @@ only have to be run once, right after application startup.
 We can also use an @Order annotation or implement an
 Ordered interface so as to define the exact order in which we want Spring Boot to execute
 them
+
+LOWEST_PRECEDENCE is the default order that is assigned
+
+Without spring.factories containing the configuration, Spring Boot does not really
+know that the DbCountAutoConfiguration class should be included during the application
+context creation. By default, the configuration component scan will look only from the
+package to which BookPubApplication class belongs to and below
  */
 
-@Order(12)
+@Order(Ordered.LOWEST_PRECEDENCE - 15)
 class StartupRunner extends CommandLineRunner {
   private[this] val log = LoggerFactory.getLogger(getClass)
 
