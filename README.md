@@ -4,7 +4,7 @@
 ### Dev
 
 - `./gradlew build`
-- `./gradlew clean bootRun`
+- `[DEBUG=true] ./gradlew clean bootRun [--debug|-Ddebug=true]`
 - `java -jar build/libs/time-endless-app-0.3.0.jar`
 
 === Using sbt as the build tool
