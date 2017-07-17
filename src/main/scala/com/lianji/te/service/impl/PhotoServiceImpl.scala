@@ -1,6 +1,6 @@
 package com.lianji.te.service.impl
 
-import com.lianji.te.domain.Photo
+import com.lianji.te.domain.{Category, Photo}
 import com.lianji.te.service.{PhotoRepository, PhotoService}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.{Page, Pageable}
@@ -13,5 +13,9 @@ class PhotoServiceImpl @Autowired()(
 ) extends PhotoService {
 
   @Transactional
+  override def findAllPageable(pageable: Pageable, category: Category): Page[Photo] = {
+    photoRepository.findByCategory(category, pageable)
+  }
+
   override def findAllPageable(pageable: Pageable): Page[Photo] = photoRepository.findAll(pageable)
 }

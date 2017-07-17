@@ -43,19 +43,25 @@ class PhotoController @Autowired()(
 
   @GetMapping(Array("/view"))
   def showPersonsPage(
+    @RequestParam("category") category: Optional[String],
     @RequestParam("pageSize") pageSize: Optional[Integer],
     @RequestParam("page") page: Optional[Integer]
   ) = {
     val modelAndView = new ModelAndView("photos")
     val evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE)
     val evalPage = if (page.orElse(0) < 1) INITIAL_PAGE else page.get - 1
-    val photos = photoService.findAllPageable(new PageRequest(evalPage, evalPageSize))
+    val photos = if (category.isPresent && category.get() != "all") {
+      photoService.findAllPageable(new PageRequest(evalPage, evalPageSize), Category.valueOf(category.get()))
+    } else {
+      photoService.findAllPageable(new PageRequest(evalPage, evalPageSize))
+    }
     val pager = new Pager(photos.getTotalPages, photos.getNumber, BUTTONS_TO_SHOW)
     println(s"$pager")
     modelAndView.addObject("photos", photos)
     modelAndView.addObject("selectedPageSize", evalPageSize)
     modelAndView.addObject("pageSizes", PAGE_SIZES)
     modelAndView.addObject("pager", pager)
+    modelAndView.addObject("category", category.orElse("all"))
     modelAndView
   }
 

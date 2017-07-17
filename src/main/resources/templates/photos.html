@@ -75,7 +75,7 @@
 <nav class="main-nav-outer" id="test"><!--main-nav-start-->
     <div class="container">
         <ul class="main-nav">
-            <li><a href="#header">Home</a></li>
+            <li><a href="/#header">Home</a></li>
             <li><a href="#service">Services</a></li>
             <li><a href="#Portfolio">Portfolio</a></li>
             <li class="small-logo"><a href="#header"><img src="../img/TE20B.png" alt=""/></a></li>
@@ -93,11 +93,11 @@
         <h6>Fresh portfolio of designs that will keep you wanting more.</h6>
         <div class="portfolioFilter">
             <ul class="Portfolio-nav wow fadeIn delay-02s">
-                <li><a href="#" data-filter="*" class="current">All</a></li>
-                <li><a href="#" data-filter=".Porttrait">Portrait</a></li>
-                <li><a href="#" data-filter=".Landscape">Landscape</a></li>
-                <li><a href="#" data-filter=".Animal">Animals</a></li>
-                <li><a href="#" data-filter=".Other">Others</a></li>
+                <li><a href="/photos/view?category=all" data-filter="*" class="all">All</a></li>
+                <li><a href="/photos/view?category=Porttrait" data-filter="Porttrait" class="Porttrait">Portrait</a></li>
+                <li><a href="/photos/view?category=Landscape" data-filter="Landscape" class="Landscape">Landscape</a></li>
+                <li><a href="/photos/view?category=Animal" data-filter="Animal" class="Animal">Animals</a></li>
+                <li><a href="/photos/view?category=Other" data-filter="Other" class="Other">Others</a></li>
             </ul>
         </div>
     </div>
@@ -130,20 +130,20 @@
             <div th:if="${photos.totalPages != 1}" class="form-group col-md-11 pagination-centered">
                 <ul class="pagination">
                     <li th:class="${photos.number == 0} ? disabled">
-                        <a class="pageLink" th:href="@{/photos/view?(pageSize=${selectedPageSize}, page=1)}">&laquo;</a>
+                        <a class="pageLink" th:href="@{/photos/view?(pageSize=${selectedPageSize}, category=${category}, page=1)}">&laquo;</a>
                     </li>
                     <li th:class="${photos.number == 0} ? disabled">
-                        <a class="pageLink" th:href="@{/photos/view?(pageSize=${selectedPageSize}, page=${photos.number})}">&larr;</a>
+                        <a class="pageLink" th:href="@{/photos/view?(pageSize=${selectedPageSize}, category=${category}, page=${photos.number})}">&larr;</a>
                     </li>
                     <li th:class="${photos.number == (page - 1)} ? 'active pointer-disabled'"
                         th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-                        <a class="pageLink" th:href="@{/photos/view?(pageSize=${selectedPageSize}, page=${page})}" th:text="${page}"></a>
+                        <a class="pageLink" th:href="@{/photos/view?(pageSize=${selectedPageSize}, category=${category}, page=${page})}" th:text="${page}"></a>
                     </li>
                     <li th:class="${photos.number + 1 == photos.totalPages} ? disabled">
-                        <a class="pageLink" th:href="@{/photos/view?(pageSize=${selectedPageSize}, page=${photos.number + 2})}">&rarr;</a>
+                        <a class="pageLink" th:href="@{/photos/view?(pageSize=${selectedPageSize}, category=${category}, page=${photos.number + 2})}">&rarr;</a>
                     </li>
                     <li th:class="${photos.number + 1 == photos.totalPages} ? disabled">
-                        <a class="pageLink" th:href="@{/photos/view?(pageSize=${selectedPageSize}, page=${photos.totalPages})}">&raquo;</a>
+                        <a class="pageLink" th:href="@{/photos/view?(pageSize=${selectedPageSize}, category=${category}, page=${photos.totalPages})}">&raquo;</a>
                     </li>
                 </ul>
             </div>
@@ -184,30 +184,6 @@
     wow.init();
 </script>
 
-
-<script type="text/javascript">
-    $(window).load(function () {
-
-        $('.main-nav li a, .servicelink').bind('click', function (event) {
-            var $anchor = $(this);
-
-            $('html, body').stop().animate({
-                scrollTop: $($anchor.attr('href')).offset().top - 102
-            }, 1500, 'easeInOutExpo');
-            /*
-             if you don't want to use the easing effects:
-             $('html, body').stop().animate({
-             scrollTop: $($anchor.attr('href')).offset().top
-             }, 1000);
-             */
-            if ($(window).width() < 768) {
-                $('.main-nav').hide();
-            }
-            event.preventDefault();
-        });
-    })
-</script>
-
 <script type="text/javascript">
 
     $(window).load(function () {
@@ -239,17 +215,18 @@
             }
 
         }).smartresize(); // trigger resize to set container width
-        $('.portfolioFilter a').click(function () {
-            $('.portfolioFilter .current').removeClass('current');
-            $(this).addClass('current');
-
-            var selector = $(this).attr('data-filter');
-            console.log(selector);
-            $container.isotope({
-                filter: selector,
-            });
-            return false;
-        });
+//        $('.portfolioFilter a').click(function () {
+//            $('.portfolioFilter .current').removeClass('current');
+//            $(this).addClass('current');
+//
+//            var selector = $(this).attr('data-filter');
+//            console.log(selector);
+//            $container.isotope({
+//                filter: selector,
+//            });
+//
+//            return false;
+//        });
 
     });
 
