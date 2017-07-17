@@ -2,9 +2,11 @@ package com.lianji.te.service
 
 import java.lang.Long
 
-import com.lianji.te.domain.{ Category, Photo }
+import com.lianji.te.domain.{Category, Photo}
 import org.springframework.data.repository.PagingAndSortingRepository
+import org.springframework.stereotype.Repository
 
+@Repository
 trait PhotoRepository extends PagingAndSortingRepository[Photo, Long] {
 
   // extend with a custom finder
