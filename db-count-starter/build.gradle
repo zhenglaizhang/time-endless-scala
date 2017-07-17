@@ -1,0 +1,22 @@
+apply plugin: 'scala'
+
+ext {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+repositories {
+    mavenCentral()
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.spring.io/snapshot" }
+        maven { url "https://repo.spring.io/milestone" }
+    }
+
+    dependencies {
+        compile("org.springframework.boot:spring-boot:1.5.4.RELEASE")
+        compile("org.springframework.boot:spring-boot-autoconfigure:1.5.4.RELEASE")
+        compile("org.scala-lang:scala-library:2.12.2")
+        compile("org.springframework.data:spring-data-commons:1.13.4.RELEASE")
+    }
+}

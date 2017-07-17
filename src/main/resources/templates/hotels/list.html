@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorator="layout/sitelayout">
+<head>
+<title th:text="#{app.name}">List of Hotels</title>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap-theme.css}" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.css" />
+<link rel="stylesheet" th:href="@{/css/application.css}" href="../../static/css/application.css" />
+    <script>
+        $(document).ready(function () {
+
+            $("#btnSubmit").click(function (event) {
+
+                //stop submit the form, we will post it manually.
+                event.preventDefault();
+
+                fire_ajax_submit();
+
+            });
+
+        });
+
+        function fire_ajax_submit() {
+
+            // Get form
+            var form = $('#fileUploadForm')[0];
+
+            var data = new FormData(form);
+
+            data.append("CustomField", "This is some extra data, testing");
+
+            $("#btnSubmit").prop("disabled", true);
+
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/photos/form",
+                data: data,
+                //http://api.jquery.com/jQuery.ajax/
+                //https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
+                processData: false, //prevent jQuery from automatically transforming the data into a query string
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (data) {
+
+                    $("#result").text(data);
+                    console.log("SUCCESS : ", data);
+                    $("#btnSubmit").prop("disabled", false);
+
+                },
+                error: function (e) {
+
+                    $("#result").text(e.responseText);
+                    console.log("ERROR : ", e);
+                    $("#btnSubmit").prop("disabled", false);
+
+                }
+            });
+        }
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<h1 class="well well-small">Hotels</h1>
+			</div>
+		</div>
+		<div layout:fragment="content">
+			<div class="row">
+				<div class="col-xs-12">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Name</th>
+								<th>Address</th>
+								<th>Zip</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:if="${hotels.empty}">
+								<td colspan="5">No messages</td>
+							</tr>
+							<tr th:each="hotel : ${hotels}">
+								<td th:text="${hotel.id}">1</td>
+								<td th:text="${hotel.name}">Test Name 1</td>
+								<td th:text="${hotel.address}">Test Address 1</td>
+								<td th:text="${hotel.zip}">Test Zip 1</td>
+								<td><a th:href="@{/hotels/edit/__${hotel.id}__}" href="#">Edit</a>
+									| <a th:href="@{/hotels/delete/__${hotel.id}__}" href="#">Delete</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<a href="#" th:href="@{/hotels?form=true}" class="btn btn-default">New Hotel</a>
+				</div>
+			</div>
+			<div class="row">
+                <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
+                    <input type="text" name="name"/><br/><br/>
+					<input type="text" name="description"/><br/><br/>
+                    <input type="file" name="file"/><br/><br/>
+                    <input type="submit" value="Submit" id="btnSubmit"/>
+                </form>
+                <h1>Ajax Post Result</h1>
+<pre>
+    <span id="result"></span>
+</pre>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

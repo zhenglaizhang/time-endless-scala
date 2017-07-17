@@ -1,0 +1,504 @@
+<!doctype html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, maximum-scale=1"/>
+
+    <title>Homepage</title>
+    <link rel="icon" href="favicon.png" type="image/png"/>
+    <link rel="shortcut icon" href="favicon.ico" type="img/x-icon"/>
+
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,800italic,700italic,600italic,400italic,300italic,800,700,600'
+          rel='stylesheet' type='text/css'/>
+
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="css/font-awesome.css" rel="stylesheet" type="text/css"/>
+    <link href="css/responsive.css" rel="stylesheet" type="text/css"/>
+    <link href="css/animate.css" rel="stylesheet" type="text/css"/>
+    <link href="css/iconfont.css" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript" src="js/jquery.1.8.3.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/jquery-scrolltofixed.js"></script>
+    <script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="js/jquery.isotope.js"></script>
+    <script type="text/javascript" src="js/wow.js"></script>
+    <script type="text/javascript" src="js/classie.js"></script>
+    <script src="contactform/contactform.js"></script>
+</head>
+<body>
+<script>
+    $(document).ready(function () {
+
+        $("#btnMessageSubmit").click(function (event) {
+
+            //stop submit the form, we will post it manually.
+            event.preventDefault();
+            fire_ajax_submit();
+        });
+    });
+
+    function fire_ajax_submit() {
+
+        // Get form
+        var form = $('#messagePostForm')[0];
+        var data = new FormData(form);
+        data.append("CustomField", "This is some extra data, testing");
+        $("#btnMessageSubmit").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+//            enctype: 'multipart/form-data',
+            url: "/messages/form",
+            data: data,
+            //http://api.jquery.com/jQuery.ajax/
+            //https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
+            processData: false, //prevent jQuery from automatically transforming the data into a query string
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                $("#sendMessage").text(data);
+                console.log("SUCCESS : ", data);
+                $("#btnMessageSubmit").prop("disabled", false);
+
+            },
+            error: function (e) {
+                $("#errorMessage").text(e.responseText);
+                console.log("ERROR : ", e);
+                $("#btnMessageSubmit").prop("disabled", false);
+            }
+        });
+    }
+</script>
+<header class="header" id="header"><!--header-start-->
+    <div class="container">
+        <figure class="logo animated fadeInDown delay-07s">
+            <a href="#"><img src="img/TE20W.png" alt=""/></a>
+        </figure>
+        <!-- =======================================================
+                <h1 class="animated fadeInDown delay-07s">Welcome To Knight Studios</h1>
+                <ul class="we-create animated fadeInUp delay-1s">
+                    <li>We are a digital agency that loves crafting beautiful websites.</li>
+                </ul>
+        ======================================================= -->
+        <a class="link animated fadeInUp delay-1s servicelink" href="#service">Get Started</a>
+    </div>
+</header><!--header-end-->
+
+<nav class="main-nav-outer" id="test"><!--main-nav-start-->
+    <div class="container">
+        <ul class="main-nav">
+            <li><a href="#header">Home</a></li>
+            <li><a href="#service">Services</a></li>
+            <li><a href="#Portfolio">Portfolio</a></li>
+            <li class="small-logo"><a href="#header"><img src="img/TE20B.png" alt=""/></a></li>
+            <li><a href="#client">Booking</a></li>
+            <li><a href="#team">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a class="res-nav_click" href="#"><i class="fa-bars"></i></a>
+    </div>
+</nav><!--main-nav-end-->
+
+
+<section class="main-section" id="service"><!--main-section-start-->
+    <div class="container">
+        <h2>Services</h2>
+        <h6>We offer exceptional service with complimentary hugs.</h6>
+        <div class="row">
+            <div class="col-lg-4 col-sm-6 wow fadeInLeft delay-05s">
+                <div class="service-list">
+                    <div class="service-list-col1">
+                        <i class="fa-paw"></i>
+                    </div>
+                    <div class="service-list-col2">
+                        <h3>branding &amp; identity</h3>
+                        <p>Proin iaculis purus digni consequat sem digni ssim. Donec entum digni ssim.</p>
+                    </div>
+                </div>
+                <div class="service-list">
+                    <div class="service-list-col1">
+                        <i class="fa-gear"></i>
+                    </div>
+                    <div class="service-list-col2">
+                        <h3>web development</h3>
+                        <p>Proin iaculis purus consequat sem digni ssim. Digni ssim porttitora .</p>
+                    </div>
+                </div>
+                <div class="service-list">
+                    <div class="service-list-col1">
+                        <i class="fa-apple"></i>
+                    </div>
+                    <div class="service-list-col2">
+                        <h3>mobile design</h3>
+                        <p>Proin iaculis purus consequat digni sem digni ssim. Purus donec porttitora entum.</p>
+                    </div>
+                </div>
+                <div class="service-list">
+                    <div class="service-list-col1">
+                        <i class="fa-medkit"></i>
+                    </div>
+                    <div class="service-list-col2">
+                        <h3>24/7 Support</h3>
+                        <p>Proin iaculis purus consequat sem digni ssim. Sem porttitora entum.</p>
+                    </div>
+                </div>
+            </div>
+            <figure class="col-lg-8 col-sm-6  text-right wow fadeInUp delay-02s">
+                <img src="img/macbook-pro.png" alt=""/>
+            </figure>
+        </div>
+    </div>
+</section><!--main-section-end-->
+
+<section class="main-section paddind" id="Portfolio"><!--main-section-start-->
+    <div class="container">
+        <h2>Portfolio</h2>
+        <h6>Fresh portfolio of designs that will keep you wanting more.</h6>
+        <div class="portfolioFilter">
+            <ul class="Portfolio-nav wow fadeIn delay-02s">
+                <li><a href="#" data-filter="*" class="current">All</a></li>
+                <li><a href="#" data-filter=".Porttrait">Portrait</a></li>
+                <li><a href="#" data-filter=".Landscape">Landscape</a></li>
+                <li><a href="#" data-filter=".Animal">Animals</a></li>
+                <li><a href="#" data-filter=".Other">Others</a></li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="portfolioContainer wow fadeInUp delay-04s">
+        <div th:each="photo : ${photos}">
+            <div class="Portfolio-box" th:classappend="${photo.category}">
+                <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title="This is my title"
+                   data-caption="Some lovely red flowers"
+                   th:attr="data-image=${photo.url},data-caption=${photo.category},data-title=${photo.name},data-taken=${photo.dateTimeOriginal},data-fnumber=${photo.fNumber},data-model=${photo.model},data-exposure=${photo.exposureTime},data-exposure-program=${photo.exposureProgram},data-metering-mode=${photo.meteringMode},data-iso=${photo.isoSpeedRatings}"
+                   data-image="${photo.url}"
+                   data-target="#image-gallery">
+                    <img class="img-responsive" th:src="${photo.url}"
+                         alt="Short alt text" src="">
+                </a>
+
+                <!--<a href="#"><img th:src="${photo.url}" alt="" src="#"/></a>-->
+                <h3 th:text="${photo.name}">Name</h3>
+                <p th:text="${photo.category}">Category</p>
+            </div>
+        </div>
+    </div>
+</section><!--main-section-end-->
+
+
+<section class="main-section client-part" id="client"><!--main-section client-part-start-->
+    <div class="container">
+        <b class="quote-right wow fadeInDown delay-03"><i class="fa-quote-right"></i></b>
+        <div class="row">
+            <div class="col-lg-12">
+                <p class="client-part-haead wow fadeInDown delay-05">May this enlighten the path of my endless...</p>
+            </div>
+        </div>
+        <ul class="client wow fadeIn delay-05s">
+            <li><a href="#">
+                <img src="img/WeChat_Logo.jpg" alt=""/>
+                <h3>Justin Yuan</h3>
+                <span>License To Drink Inc.</span>
+            </a></li>
+        </ul>
+    </div>
+</section><!--main-section client-part-end-->
+
+<div class="c-logo-part"><!--c-logo-part-start-->
+    <div class="container">
+        <ul>
+
+        </ul>
+    </div>
+</div><!--c-logo-part-end-->
+
+<section class="business-talking"><!--business-talking-start-->
+    <div class="container">
+        <h2>Let’s Talk Business.</h2>
+    </div>
+</section><!--business-talking-end-->
+<div class="container">
+    <section class="main-section contact" id="contact">
+
+        <div class="row">
+            <div class="col-lg-6 col-sm-7 wow fadeInLeft">
+                <div class="contact-info-box address clearfix">
+                    <h3><i class=" icon-map-marker"></i>WeChat:</h3>
+                    <img src="img/WeChat_QR.jpg" alt=""/>
+                </div>
+                <div class="contact-info-box phone clearfix">
+                    <h3><i class="fa-phone"></i>Phone:</h3>
+                    <span>+86 15000 270700</span>
+                    <span>+64 27 3415000</span>
+                </div>
+                <div class="contact-info-box email clearfix">
+                    <h3><i class="fa-pencil"></i>email:</h3>
+                    <span>timendless@qq.com</span>
+                </div>
+                <div class="contact-info-box hours clearfix">
+                    <h3><i class="fa-clock-o"></i>Hours:</h3>
+                    <span><strong>Monday - Friday:</strong> 10am - 6pm<br/><strong>Saturday - Sunday:</strong> Best not to ask.</span>
+                </div>
+                <ul class="social-link">
+                    <li class="twitter"><a href="http://www.facebook.com/polar1z" target="_blank"><i class="fa-twitter"></i></a></li>
+                    <li class="facebook"><a href="http://www.facebook.com/polar1z" target="_blank"><i class="fa-facebook"></i></a></li>
+                    <li class="pinterest"><a href="#"><i class="fa-pinterest"></i></a></li>
+                    <li class="gplus"><a href="#"><i class="fa-google-plus"></i></a></li>
+                    <li class="dribbble"><a href="#"><i class="fa-dribbble"></i></a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-6 col-sm-5 wow fadeInUp delay-05s">
+                <div class="form">
+                    <span id="sendMessage" hidden>Your message has been sent. Thank you!</span>
+                    <span id="errorMessage"></span>
+                    <form method="post" role="form" class="contactForm" id="messagePostForm">
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-control input-text" id="name" placeholder="Your Name"
+                                   data-rule="minlen:4" data-msg="Please enter at least 4 chars"/>
+                            <div class="validation"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control input-text" name="email" id="email" placeholder="Your Email"
+                                   data-rule="email" data-msg="Please enter a valid email"/>
+                            <div class="validation"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control input-text" name="subject" id="subject" placeholder="Subject"
+                                   data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject"/>
+                            <div class="validation"></div>
+                        </div>
+                        <div class="form-group">
+                                    <textarea class="form-control input-text text-area" name="message" rows="5" data-rule="required"
+                                              data-msg="Please write something for us" placeholder="Message"></textarea>
+                            <div class="validation"></div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" id="btnMessageSubmit" class="input-btn">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-logo"><a href="#"><img src="img/TE20W.png" alt=""/></a></div>
+        <span class="copyright">&copy; Time Endless Studio. All Rights Reserved</span>
+        <div class="credits">
+            <a href="https://bootstrapmade.com/free-business-bootstrap-themes-website-templates/">Business Bootstrap Themes</a> by
+            <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </div>
+</footer>
+
+
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $('#test').scrollToFixed();
+        $('.res-nav_click').click(function () {
+            $('.main-nav').slideToggle();
+            return false
+
+        });
+
+    });
+</script>
+
+<script>
+    wow = new WOW(
+        {
+            animateClass: 'animated',
+            offset: 100
+        }
+    );
+    wow.init();
+</script>
+
+
+<script type="text/javascript">
+    $(window).load(function () {
+
+        $('.main-nav li a, .servicelink').bind('click', function (event) {
+            var $anchor = $(this);
+
+            $('html, body').stop().animate({
+                scrollTop: $($anchor.attr('href')).offset().top - 102
+            }, 1500, 'easeInOutExpo');
+            /*
+             if you don't want to use the easing effects:
+             $('html, body').stop().animate({
+             scrollTop: $($anchor.attr('href')).offset().top
+             }, 1000);
+             */
+            if ($(window).width() < 768) {
+                $('.main-nav').hide();
+            }
+            event.preventDefault();
+        });
+    })
+</script>
+
+<script type="text/javascript">
+
+    $(window).load(function () {
+
+
+        var $container = $('.portfolioContainer'),
+            $body = $('body'),
+            colW = 375,
+            columns = null;
+
+
+        $container.isotope({
+            // disable window resizing
+            resizable: true,
+            masonry: {
+                columnWidth: colW
+            }
+        });
+
+        $(window).smartresize(function () {
+            // check if columns has changed
+            var currentColumns = Math.floor(( $body.width() - 30 ) / colW);
+            if (currentColumns !== columns) {
+                // set new column count
+                columns = currentColumns;
+                // apply width to container manually, then trigger relayout
+                $container.width(columns * colW)
+                    .isotope('reLayout');
+            }
+
+        }).smartresize(); // trigger resize to set container width
+        $('.portfolioFilter a').click(function () {
+            $('.portfolioFilter .current').removeClass('current');
+            $(this).addClass('current');
+
+            var selector = $(this).attr('data-filter');
+            console.log(selector);
+            $container.isotope({
+                filter: selector,
+            });
+            return false;
+        });
+
+    });
+
+</script>
+
+<div class="row">
+
+    <script>
+        $(document).ready(function () {
+
+            loadGallery(true, 'a.thumbnail');
+
+            //This function disables buttons when needed
+            function disableButtons(counter_max, counter_current) {
+                $('#show-previous-image, #show-next-image').show();
+                if (counter_max == counter_current) {
+                    $('#show-next-image').hide();
+                } else if (counter_current == 1) {
+                    $('#show-previous-image').hide();
+                }
+            }
+
+            /**
+             *
+             * @param setIDs        Sets IDs when DOM is loaded. If using a PHP counter, set to false.
+             * @param setClickAttr  Sets the attribute for the click handler.
+             */
+
+            function loadGallery(setIDs, setClickAttr) {
+                var current_image,
+                    selector,
+                    counter = 0;
+
+                $('#show-next-image, #show-previous-image').click(function () {
+                    if ($(this).attr('id') == 'show-previous-image') {
+                        current_image--;
+                    } else {
+                        current_image++;
+                    }
+
+                    selector = $('[data-image-id="' + current_image + '"]');
+                    updateGallery(selector);
+                });
+
+                function updateGallery(selector) {
+                    var $sel = selector;
+                    current_image = $sel.data('image-id');
+                    $('#image-gallery-caption').text($sel.data('caption'));
+                    $('#image-gallery-title').text($sel.data('title'));
+                    $('#image-gallery-image').attr('src', $sel.data('image'));
+
+                    // set photo attributes
+                    $('#image-gallery-model').text($sel.data('model'));
+                    $('#image-gallery-fnumber').text($sel.data('fnumber'));
+                    $('#image-gallery-exposure').text($sel.data('exposure'));
+                    $('#image-gallery-exposure-program').text($sel.data('exposure-program'));
+                    $('#image-gallery-metering-mode').text($sel.data('metering-mode'));
+                    $('#image-gallery-iso').text($sel.data('iso'));
+                    $('#image-gallery-taken').text($sel.data('taken'));
+
+                    disableButtons(counter, $sel.data('image-id'));
+                }
+
+                if (setIDs == true) {
+                    $('[data-image-id]').each(function () {
+                        counter++;
+                        $(this).attr('data-image-id', counter);
+                    });
+                }
+                $(setClickAttr).on('click', function () {
+                    updateGallery($(this));
+                });
+            }
+        });
+    </script>
+    <div class="modal fade" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="image-gallery-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <img id="image-gallery-image" class="img-responsive" src="">
+                    <div style="line-height:20px;color:#ccc;background-color: #000;padding:5px 10px">
+                        <i class="iconfont" title="相机型号" style="font-size: 16px;"></i><span id="image-gallery-model">NEX-5</span>
+                        <i class="iconfont" title="光圈" style="font-size: 16px;"></i><span id="image-gallery-fnumber">f/7.1</span>
+                        <i class="iconfont" title="快门" style="font-size: 16px;"></i> <span id="image-gallery-exposure">1/200 sec.</span>
+                        <i class="iconfont" title="感光度" style="font-size: 20px;"></i><span id="image-gallery-iso"></span>
+                        <i class="iconfont" title="曝光程序" style="font-size: 16px;"></i> <span id="image-gallery-exposure-program"></span>
+                        <i class="iconfont" title="测光模式" style="font-size: 16px;"></i><span id="image-gallery-metering-mode"></span>
+                        <i class="iconfont" title="拍摄时间" style="font-size: 16px;"></i>
+                        <span id="image-gallery-taken">2012年09月23日 13:54</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-primary" id="show-previous-image">Previous</button>
+                    </div>
+
+                    <div class="col-md-8 text-justify" id="image-gallery-caption">
+                        This text will be overwritten by jQuery
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="button" id="show-next-image" class="btn btn-default">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

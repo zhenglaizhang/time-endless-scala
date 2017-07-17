@@ -1,0 +1,77 @@
+plugins {
+    // Spring Boot Gradle plugin
+    // > gradle tasks
+    // > gradle tasks --all
+    id 'org.springframework.boot' version '1.5.4.RELEASE'
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'scala'
+//apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+ext {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+jar {
+    baseName = 'time-endless-app'
+    version = '0.3.0'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+
+    //  minimize the boilerplate code to create restful resources
+    /*
+    will also bring in spring-hateoas library support, which gives us nice ALPS metadata, such as a _links object. This can be very helpful when building an API-driven UI, which can deduce the navigational capabilities from the metadata and present them appropriately.
+     */
+    compile("org.springframework.boot:spring-boot-starter-data-rest")
+
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("org.springframework.boot:spring-boot-starter-security")
+
+    // functionality to monitor, manage an application, and audit it.
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-mail")
+
+    compile("org.springframework.boot:spring-boot-devtools")
+    compile("org.thymeleaf:thymeleaf-spring4")
+    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+    compile group: 'net.sourceforge.nekohtml', name: 'nekohtml', version: '1.9.22'
+
+    compile group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.10.1'
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+
+    compile group: 'org.imgscalr', name: 'imgscalr-lib', version: '4.2'
+
+    /*
+   by default, Spring Boot makes certain assumptions about the database configuration by examining the classpath for the presence of supported database drivers
+
+    H2 database implementation
+    no need to know the exact kind of a database to which we will connect at the compile time
+   Spring Boot will autoconfigure the needed settings and create appropriate beans once it detects the presence of the org.h2.Driver class in the classpath when the application is launched.
+   Put the right classes in the class path
+     */
+    runtime("com.h2database:h2")
+
+    compile("org.scala-lang:scala-library:2.12.2")
+    compile("org.webjars:bootstrap:3.3.7")
+    compile group: 'org.webjars', name: 'jquery', version: '3.2.1'
+
+    compile group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '2.6.1'
+
+    // for demo purpose only, just include dependency only
+    // Gradle actually creates a separate artifact JAR for us but we don’t have to publish it anywhere
+    // On the inclusion of the jar in the application classpath, the DbCountRunner bean will be created automatically and added to the application context.
+    compile project(':db-count-starter')
+
+}
