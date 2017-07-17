@@ -62,6 +62,7 @@ dependencies {
    Put the right classes in the class path
      */
     runtime("com.h2database:h2")
+    runtime("mysql:mysql-connector-java")
 
     compile("org.scala-lang:scala-library:2.12.2")
     compile("org.webjars:bootstrap:3.3.7")

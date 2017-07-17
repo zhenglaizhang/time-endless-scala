@@ -51,6 +51,7 @@ class PhotoController @Autowired()(
     val evalPage = if (page.orElse(0) < 1) INITIAL_PAGE else page.get - 1
     val photos = photoService.findAllPageable(new PageRequest(evalPage, evalPageSize))
     val pager = new Pager(photos.getTotalPages, photos.getNumber, BUTTONS_TO_SHOW)
+    println(s"$pager")
     modelAndView.addObject("photos", photos)
     modelAndView.addObject("selectedPageSize", evalPageSize)
     modelAndView.addObject("pageSizes", PAGE_SIZES)

@@ -17,6 +17,12 @@ public class Pager {
 
     public Pager(int totalPages, int currentPage, int buttonsToShow) {
 
+        System.out.println();
+        System.out.println(totalPages);
+        System.out.println(currentPage);
+        System.out.println(buttonsToShow);
+        System.out.println();
+
         setButtonsToShow(buttonsToShow);
 
         int halfPagesToShow = getButtonsToShow() / 2;
