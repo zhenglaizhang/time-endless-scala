@@ -7,6 +7,8 @@
 
 ### Dev
 
+-`export OSS_KEY_ID=xxx`
+-`export OSS_KEY_SECRET=xxx`
 - `[DEBUG=true] ./gradlew clean bootRun [--debug|-Ddebug=true]`
 - `./gradlew build`
 - `java -jar build/libs/time-endless-app-0.3.0.jar`
