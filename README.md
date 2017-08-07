@@ -18,6 +18,68 @@
 
 goto `http://localhost:8080/photos` to upload photos
 
+
+### Photos Rest api
+
+try following requests (auth header ignored):
+```
+http://localhost:8080/api/photos
+http://localhost:8080/api/photos?page=0&size=1
+http://localhost:8080/api/photos?page=0&size=1&category=Porttrait
+# categories: Porttrait(0), Landscape(1), Animal(2), Other(3);
+```
+
+sample output:
+
+```json
+{
+  "content": [
+    {
+      "id": 1,
+      "category": "Porttrait",
+      "name": "name",
+      "description": "description",
+      "dateTimeOriginal": {
+        "year": 2015,
+        "month": "JUNE",
+        "era": "CE",
+        "dayOfYear": 169,
+        "dayOfWeek": "THURSDAY",
+        "leapYear": false,
+        "dayOfMonth": 18,
+        "monthValue": 6,
+        "chronology": {
+          "calendarType": "iso8601",
+          "id": "ISO"
+        }
+      },
+      "width": 5760,
+      "height": 3840,
+      "exposureTime": "1/320 sec",
+      "meteringMode": "Multi-segment",
+      "exposureProgram": "Program normal",
+      "model": "Canon EOS 5D Mark III",
+      "make": "Canon",
+      "copyright": "LiuMang",
+      "isoSpeedRatings": 100,
+      "apertureValue": "f/4.6",
+      "maxApertureValue": "f/2.8",
+      "focalLength": "140 mm",
+      "url": "http://timendless.oss-ap-southeast-1.aliyuncs.com/Porttrait/1.jpg",
+      "fnumber": "f/4.5"
+    }
+  ],
+  "totalPages": 2,
+  "totalElements": 2,
+  "last": false,
+  "numberOfElements": 1,
+  "first": true,
+  "sort": null,
+  "size": 1,
+  "number": 0
+}
+```
+
 === Using sbt as the build tool
 
 Start up sbt console
