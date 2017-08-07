@@ -16,6 +16,8 @@
 - `/build/libs/time-endless-app-0.0.1-SNAPSHOT-exec.jar --spring.profiles.active=logger,inmemorydb`
   - use the `inmemorydb` Profile configuration in order to use the in-memory database instead of the file-based one.
 
+goto `http://localhost:8080/photos` to upload photos
+
 === Using sbt as the build tool
 
 Start up sbt console
