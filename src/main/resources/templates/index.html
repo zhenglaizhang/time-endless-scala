@@ -42,6 +42,8 @@
     <div class="aside-toggle btn-circle">
         <a href="#" id="Menu"><span></span><em>Menu</em></a>
     </div>
+    <div id="categoryContainer" class="category btn-circle">
+    </div>
 </div>
 <div id="fh5co-aside">
     <div class="image-bg"></div>
@@ -54,37 +56,6 @@
                         <img src="images/logo.png" alt="" class="img-responsive" style="height:120px">
                         <br>
                         <br>
-                    </div>
-                    <div class="col-md-12">
-                        <h2>Categories</h2>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="#" onclick="changePhoto('all')"><h3 style="color:#fff"><i
-                                class="icon-camera-retro"></i> All</h3></a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="#" onclick="changePhoto('Landscape')"><h3 style="color:#fff"><i
-                                class="icon-picture-o"></i> Landscape</h3></a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="#" onclick="changePhoto('Portrait')"><h3 style="color:#fff"><i
-                                class="icon-user"></i> Portrait</h3></a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="#" onclick="changePhoto('Animal')"><h3 style="color:#fff"><i
-                                class="icon-paw"></i> Animal</h3></a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="#" onclick="changePhoto('Plant')"><h3 style="color:#fff"><i
-                                class="icon-tree"></i> Plant</h3></a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="#" onclick="changePhoto('Building')"><h3 style="color:#fff"><i
-                                class="icon-home "></i> Building</h3></a>
-                    </div>
-                    <div class="col-md-6">
-                        <a href="#" onclick="changePhoto('Activity')"><h3 style="color:#fff"><i
-                                class="icon-calendar-check-o"></i> Activity</h3></a>
                     </div>
                     <div class="col-md-12">
                         <h2>Contact</h2>
@@ -357,40 +328,6 @@
         $grid.isotope({filter: "*"});
 
     });
-
-    function changePhoto(status) {
-        $("#Menu").click();
-        $('body .grid-photo').each(function (k) {
-            var el = $(this);
-            var effect = el.data('photo');
-            if (effect == status) {
-                el.removeClass('fadeIn animated-fast');
-            } else {
-                el.removeClass('fadeIn animated-fast');
-            }
-        });
-        setTimeout(function () {
-            if (status == "all") {
-                $grid.isotope({filter: "*"});
-            } else {
-                $grid.isotope({filter: "." + status});
-            }
-            setTimeout(function () {
-                $('body .grid-photo').each(function (k) {
-                    var el = $(this);
-                    var effect = el.data('photo');
-                    if (effect == status || status == "all") {
-                        setTimeout(function () {
-                            el.addClass('fadeIn animated-fast');
-                        }, k * 50, 'easeInOutExpo');
-                    } else {
-
-                    }
-                });
-            }, 50);
-        }, 50);
-    }
 </script>
 </body>
 </html>
-
