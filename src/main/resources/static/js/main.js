@@ -164,7 +164,7 @@
 	var categories = ['all', 'Landscape', 'Portrait', 'Animal', 'Other'	];
 	//collapased, expanding, expanded,collapsing,
 	var state = 'collapased';
-	var gap = 90;
+	var gap = 110;
 	var expandQueue = [];
 	var collapseQueue = [];
 
@@ -371,6 +371,7 @@
 			}
 			currentPageIdx += 1;
 			hasMore = !json.last;
+			isFetching = false;
 			magnifPopup();
 			// $('.grid a').magnificPopup({
 	    //   type: 'image',
@@ -384,6 +385,19 @@
     });
 	}
 
+  var isFetching = false;
+	function initWaypoint() {
+		$('.bottom').waypoint({
+			handler: function(direction) {
+				console.log('bottom reached!');
+				if(hasMore && !isFetching) {
+					isFetching = true;
+					fetchPage(currentPageIdx + 1);
+				}
+			},
+			offset: 'bottom-in-view'
+		})
+	}
 
 	$(function(){
 		contentWayPoint();
@@ -391,8 +405,9 @@
 		toggleAside();
 		initCategories();
 		buttonsCustom();
+		initWaypoint();
 		//请求照片
-		fetchPage(0);
+		// fetchPage(0);
 	});
 
 
