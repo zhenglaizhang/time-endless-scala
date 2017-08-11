@@ -161,9 +161,7 @@
 		})
 	}
 
-	var categories = ['all', 'Landscape', 'Portrait', 'Animal', 'Plant',
-		'Building', 'Activity'
-	];
+	var categories = ['all', 'Landscape', 'Portrait', 'Animal', 'Other'	];
 	//collapased, expanding, expanded,collapsing,
 	var state = 'collapased';
 	var gap = 90;
@@ -297,6 +295,95 @@
 			}, 50);
 	}
 
+	function getPhotoDiv(category, imageSrc, name, description) {
+		return `
+		<div class='grid-photo grid-item item animate-box fadeIn animated-fast ${category}' data-animate-effect='fadeIn' data-photo='${category}'>
+					    <a href='${imageSrc}' class='image-popup' title='${name}'>
+					        <div class='img-wrap'>
+					            <img src='${imageSrc}' alt='' class='img-responsive'>
+					        </div>
+									<div class='text-wrap'>
+											<div class='text-inner popup'>
+													<div>
+															<h2>${name}</h2>
+															<span>${description}</span>
+													</div>
+											</div>
+									</div>
+							</a>
+						</div>
+		`
+	}
+
+
+	  // MagnificPopup
+		var magnifPopup = function() {
+			$('.image-popup').magnificPopup({
+				type: 'image',
+				removalDelay: 300,
+				mainClass: 'mfp-with-zoom',
+				gallery:{
+					enabled:true
+				},
+				zoom: {
+					enabled: true, // By default it's false, so don't forget to enable it
+
+					duration: 300, // duration of the effect, in milliseconds
+					easing: 'ease-in-out', // CSS transition easing function
+
+					// The "opener" function should return the element from which popup will be zoomed in
+					// and to which popup will be scaled down
+					// By defailt it looks for an image tag:
+					opener: function(openerElement) {
+					// openerElement is the element on which popup was initialized, in this case its <a> tag
+					// you don't need to add "opener" option if this code matches your needs, it's defailt one.
+					return openerElement.is('img') ? openerElement : openerElement.find('img');
+					}
+				}
+			});
+		};
+
+		var magnifVideo = function() {
+			$('.popup-youtube, .popup-vimeo, .popup-gmaps').magnificPopup({
+	        disableOn: 700,
+	        type: 'iframe',
+	        mainClass: 'mfp-fade',
+	        removalDelay: 160,
+	        preloader: false,
+
+	        fixedContentPos: false
+	    });
+		};
+
+	let currentPageIdx = -1;
+	let hasMore = true;
+	function fetchPage(pageIdx) {
+		$.ajax({
+      method: 'GET',
+      url: `http://localhost:8080/api/photos?page=${pageIdx}`,
+    }).done(function(json){
+
+			let contents = json['content'];
+			for(let i=0; i< contents.length; i++) {
+				let content = contents[i];
+				let divStr = getPhotoDiv(content.category, content.url, content.name, content.description);
+				$('.grid').append(divStr);
+			}
+			currentPageIdx += 1;
+			hasMore = !json.last;
+			magnifPopup();
+			// $('.grid a').magnificPopup({
+	    //   type: 'image',
+	    //   gallery: {
+	    //     enable: true,
+	    //     navigateByImgClick: true,
+			// 		preload: [0, 1]
+	    //   }
+	    // }
+	    // );
+    });
+	}
+
 
 	$(function(){
 		contentWayPoint();
@@ -304,6 +391,8 @@
 		toggleAside();
 		initCategories();
 		buttonsCustom();
+		//请求照片
+		fetchPage(0);
 	});
 
 
