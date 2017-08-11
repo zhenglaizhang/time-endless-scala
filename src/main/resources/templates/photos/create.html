@@ -63,6 +63,15 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="index" class="col-xs-2">Small Index Image</label>
+                        <div class="col-xs-6">
+                            <input class="form-control" type="file" placeholder="Image" th:field="*{index}"/>
+                        </div>
+                        <div class="col-xs-4">
+                            <p class="text-warning" th:if="${#fields.hasErrors('index')}" th:errors="*{index}">Error with index</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="file" class="col-xs-2">Image</label>
                         <div class="col-xs-6">
                             <input class="form-control" type="file" placeholder="Image" th:field="*{file}"/>

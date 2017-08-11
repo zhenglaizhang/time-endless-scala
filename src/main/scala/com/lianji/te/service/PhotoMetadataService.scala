@@ -55,7 +55,8 @@ class PhotoMetadataService {
       apertureValue = apertureValue,
       maxApertureValue = maxApertureValue,
       focalLength = focalLength,
-      url = url
+      url = url,
+      url_index = url
     )
   }
 

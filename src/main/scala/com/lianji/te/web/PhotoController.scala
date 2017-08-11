@@ -112,11 +112,18 @@ class PhotoController @Autowired()(
     val sizedInputStream = photoMetaService.crapImgInputStream(req.file.getInputStream)
     val oss = new OssService(endpoint, id, secret)
     oss.setBucketPublicReadable(bucket)
+
+    // upload img
     val key = s"${ req.category.name }/${ savedPhoto.id }.jpg"
     oss.uploadJpg(bucket, key, sizedInputStream)
+
+    // upload index
+    val key_index = s"${req.category.name}/${savedPhoto.id}_index.jpg"
+    oss.uploadJpg(bucket, key_index, req.index.getInputStream)
+
     photo.url = s"http://$bucket.$endpoint/$key"
+    photo.url_index = s"http://$bucket.$endpoint/$key_index"
     photoRepository.save(photo)
-//    new ResponseEntity("Successfully created photo.", HttpStatus.OK)
     "redirect:/photos"
   }
 

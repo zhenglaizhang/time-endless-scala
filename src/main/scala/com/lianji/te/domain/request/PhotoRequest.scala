@@ -11,7 +11,8 @@ case class PhotoRequest(
   @BeanProperty @Enumerated(EnumType.ORDINAL) var category: Category,
   @BeanProperty var name: String,
   @BeanProperty var description: String,
+  @BeanProperty var index: MultipartFile,
   @BeanProperty var file: MultipartFile
 ) {
-  def this() = this(null, null, null, null)
+  def this() = this(null, null, null, null, null)
 }
