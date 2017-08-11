@@ -7,7 +7,7 @@
 }
 /* =======================================================
 *
-* 	Template Style 
+* 	Template Style
 *	Edit this section
 *
 * ======================================================= */
@@ -126,7 +126,12 @@ h1, h2, h3, h4, h5, h6, figure {
   }
 }
 
-.aside-toggle, .back-to-home {
+.category {
+  left: inherit !important;
+  right: 20px;
+}
+
+.aside-toggle, .category {
   position: fixed;
   top: 20px;
   left: 20px;
@@ -135,7 +140,7 @@ h1, h2, h3, h4, h5, h6, figure {
   -o-transition: 0.5s;
   transition: 0.5s;
 }
-.aside-toggle a, .back-to-home a {
+.aside-toggle a, .category a {
   background: #000;
   font-size: 13px;
   width: 100px;
@@ -159,7 +164,7 @@ h1, h2, h3, h4, h5, h6, figure {
   -o-transition: 0.5s;
   transition: 0.5s;
 }
-.aside-toggle a:hover, .aside-toggle a:active, .aside-toggle a:focus, .back-to-home a:hover, .back-to-home a:active, .back-to-home a:focus {
+.aside-toggle a:hover, .aside-toggle a:active, .aside-toggle a:focus, .category a:hover, .category a:active, .category a:focus {
   text-decoration: none;
   outline: none;
   -webkit-border-radius: 50%;
@@ -167,7 +172,7 @@ h1, h2, h3, h4, h5, h6, figure {
   -ms-border-radius: 50%;
   border-radius: 50%;
 }
-.aside-toggle a span, .back-to-home a span {
+.aside-toggle a span, .category a span {
   width: 100px;
   height: 100px;
   -webkit-border-radius: 50%;
@@ -198,7 +203,7 @@ h1, h2, h3, h4, h5, h6, figure {
   -o-transition: 0.3s;
   transition: 0.3s;
 }
-.aside-toggle a em, .back-to-home a em {
+.aside-toggle a em, .category a em {
   width: 100px;
   height: 100px;
   line-height: 100px;
@@ -216,14 +221,14 @@ h1, h2, h3, h4, h5, h6, figure {
   -o-transition: 0.3s;
   transition: 0.3s;
 }
-.aside-toggle a:hover, .back-to-home a:hover {
+.aside-toggle a:hover, .category a:hover {
   -webkit-transition-delay: .2s;
   /* Safari */
   -moz-transition-delay: .2s;
   transition-delay: .2s;
   background: transparent;
 }
-.aside-toggle a:hover em, .back-to-home a:hover em {
+.aside-toggle a:hover em, .category a:hover em {
   color: #fff;
   opacity: 0;
   visibility: hidden;
@@ -233,7 +238,7 @@ h1, h2, h3, h4, h5, h6, figure {
   -o-transform: scale(0);
   transform: scale(0);
 }
-.aside-toggle a:hover span, .back-to-home a:hover span {
+.aside-toggle a:hover span, .category a:hover span {
   -webkit-transform: scale(1);
   -moz-transform: scale(1);
   -ms-transform: scale(1);
@@ -242,20 +247,28 @@ h1, h2, h3, h4, h5, h6, figure {
   margin-left: 0px;
 }
 @media screen and (max-width: 768px) {
-  .aside-toggle a, .back-to-home a {
+  .aside-toggle a, .category a {
     width: 80px;
     height: 80px;
     line-height: 80px;
   }
-  .aside-toggle a span, .aside-toggle a em, .back-to-home a span, .back-to-home a em {
+  .aside-toggle a span, .aside-toggle a em, .category a span, .category a em {
     width: 80px;
     height: 80px;
     line-height: 80px;
   }
 }
 
-.back-to-home {
-  left: inherit !important;
+.currentCategory {
+  width: 100px;
+  height: 100px;
+  z-index: 100;
+}
+
+.otherCategory{
+  width: 100px;
+  height: 100px;
+  font-size: 12px;
   right: 20px;
 }
 
