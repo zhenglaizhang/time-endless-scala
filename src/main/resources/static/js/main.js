@@ -174,10 +174,8 @@
 		categories.map(function(cur, idx) {
 			var currentCategory = 'all';
 			var css = cur == currentCategory ? 'currentCategory' : 'otherCategory';
-			//var top = cur == currentCategory ? 20 : 20 + gap*(idx - 1);
-			var top = 20;
 			$('#categoryContainer').append(
-				`<div class="category btn-circle ${css}" style="z-index: ${100 - idx}; top: ${top}px;"><a href="#"><span></span><em>${cur}</em></a></div>`
+				"<div class='category btn-circle " + css + "' style='z-index: " + (100 - idx) + "; top: 20px;'><a href='#'><span></span><em>" + cur + "</em></a></div>"
 			);
 		});
 		$('.otherCategory').css('opacity', 0);
@@ -187,42 +185,50 @@
 		var oterhCategoryLength = $('.otherCategory').length;
 		var elements = $('.otherCategory').toArray();
 		var length  = elements.length;
-		for(let i=0; i<length; i++)
+		for(var i=0; i<length; i++)
 		{
-			expandQueue.push(function(){
-				$(elements.slice(i)).delay(400).animate(
-					{
-						top: top + gap*(i + 1),
-						opacity: 1
-					},
-					{
-						duration: 10
-					}
-				).promise().done(function(){
-					if(i == oterhCategoryLength - 1 )
-						state = 'expanded';
-					$(document).dequeue("filter");
-				});
-			});
+			expandQueue.push(
+				(function(){
+					var index = i;
+					return function(){
+							$(elements.slice(index)).delay(400).animate(
+								{
+									top: top + gap*(index + 1),
+									opacity: 1
+								},
+								{
+									duration: 10
+								}
+							).promise().done(function(){
+								if(index == oterhCategoryLength - 1 )
+									state = 'expanded';
+								$(document).dequeue("filter");
+							});
+				 }})()
+		);
 		}
 
-		for(let i = elements.length - 1; i >= 0; i--){
-			collapseQueue.push(function(){
-				$(elements.slice(i)).delay(300).animate(
-					{
-						top: top + gap*i,
-						opacity: 0
-					},
-					{
-						duration: 10,
-						easing: 'linear'
-					}
-				).promise().done(function(){
-					if(i == 0)
-						state = 'collapased';
-					$(document).dequeue("filter");
-				});
-			});
+		for(var j = elements.length - 1; j >= 0; j--){
+			collapseQueue.push(
+				(function(){
+					var index = j;
+					return function(){
+					$(elements.slice(index)).delay(300).animate(
+						{
+							top: top + gap*index,
+							opacity: 0
+						},
+						{
+							duration: 10,
+							easing: 'linear'
+						}
+					).promise().done(function(){
+						if(index == 0)
+							state = 'collapased';
+						$(document).dequeue("filter");
+					});
+				}})()
+				);
 		}
 
 		//注册点击处理函数
@@ -295,24 +301,41 @@
 			}, 50);
 	}
 
-	function getPhotoDiv(category, imageSrc, name, description) {
-		return `
-		<div class='grid-photo grid-item item animate-box fadeIn animated-fast ${category}' data-animate-effect='fadeIn' data-photo='${category}'>
-					    <a href='${imageSrc}' class='image-popup' title='${name}'>
-					        <div class='img-wrap'>
-					            <img src='${imageSrc}' alt='' class='img-responsive'>
-					        </div>
-									<div class='text-wrap'>
-											<div class='text-inner popup'>
-													<div>
-															<h2>${name}</h2>
-															<span>${description}</span>
-													</div>
-											</div>
-									</div>
-							</a>
-						</div>
-		`
+	function getPhotoDiv(category, smallUrl, largeUrl, name, description) {
+		return "\
+		<div class='grid-photo grid-item item animate-box fadeIn animated-fast " + category + "' data-animate-effect='fadeIn' data-photo='" + category + "'>\
+					    <a href='" + largeUrl + "' class='image-popup' title='" + name + "'>\
+					        <div class='img-wrap'>\
+					            <img src='" + smallUrl + "' alt='' class='img-responsive'>\
+					        </div>\
+									<div class='text-wrap'>\
+											<div class='text-inner popup'>\
+													<div>\
+															<h2>" + name + "</h2>\
+															<span>" + description + "</span>\
+													</div>\
+											</div>\
+									</div>\
+							</a>\
+						</div>\
+		"
+		// return `
+		// <div class='grid-photo grid-item item animate-box fadeIn animated-fast ${category}' data-animate-effect='fadeIn' data-photo='${category}'>
+		// 			    <a href='${largeUrl}' class='image-popup' title='${name}'>
+		// 			        <div class='img-wrap'>
+		// 			            <img src='${smallUrl}' alt='' class='img-responsive'>
+		// 			        </div>
+		// 							<div class='text-wrap'>
+		// 									<div class='text-inner popup'>
+		// 											<div>
+		// 													<h2>${name}</h2>
+		// 													<span>${description}</span>
+		// 											</div>
+		// 									</div>
+		// 							</div>
+		// 					</a>
+		// 				</div>
+		// `
 	}
 
 
@@ -355,18 +378,19 @@
 	    });
 		};
 
-	let currentPageIdx = -1;
-	let hasMore = true;
+	var currentPageIdx = -1;
+	var hasMore = true;
+	var pageSize = 10;
+
 	function fetchPage(pageIdx) {
 		$.ajax({
       method: 'GET',
-      url: `http://localhost:8080/api/photos?page=${pageIdx}`,
+      url: "http://localhost:8080/api/photos?page=" + pageIdx + "&size=" + pageSize + "",
     }).done(function(json){
-
-			let contents = json['content'];
-			for(let i=0; i< contents.length; i++) {
-				let content = contents[i];
-				let divStr = getPhotoDiv(content.category, content.url, content.name, content.description);
+			var contents = json['content'];
+			for(var i=0; i< contents.length; i++) {
+				var content = contents[i];
+				var divStr = getPhotoDiv(content.category, content.url_index, content.url, content.name, content.description);
 				$('.grid').append(divStr);
 			}
 			currentPageIdx += 1;
