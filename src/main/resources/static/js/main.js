@@ -380,7 +380,7 @@
 
 	var currentPageIdx = -1;
 	var hasMore = true;
-	var pageSize = 10;
+	var pageSize = 12; //pc端pageSize
 
 	function fetchPage(pageIdx) {
 		$.ajax({
@@ -396,7 +396,8 @@
 			currentPageIdx += 1;
 			hasMore = !json.last;
 			isFetching = false;
-			magnifPopup();
+			magnifPopup();//对新增的元素设置popup
+			changePhoto($('.currentCategory a span').text());//过滤新增的元素
 			// $('.grid a').magnificPopup({
 	    //   type: 'image',
 	    //   gallery: {
@@ -411,6 +412,9 @@
 
   var isFetching = false;
 	function initWaypoint() {
+		if(isMobile.any()){ //移动端pageSize
+			pageSize = 12;
+		}
 		$('.bottom').waypoint({
 			handler: function(direction) {
 				console.log('bottom reached!');
