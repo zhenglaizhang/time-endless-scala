@@ -161,10 +161,9 @@
 		})
 	}
 
-	var categories = ['all', 'Landscape', 'Portrait', 'Animal', 'Other'	];
+	var categories = ['All', 'Nature', 'Portrait', 'Activity', 'Other'];
 	//collapased, expanding, expanded,collapsing,
 	var state = 'collapased';
-	var gap = 110;
 	var expandQueue = [];
 	var collapseQueue = [];
 
@@ -172,18 +171,25 @@
 
 		//页面首次加载时调用，生成分类列表
 		categories.map(function(cur, idx) {
-			var currentCategory = 'all';
+			var currentCategory = 'All';
 			var css = cur == currentCategory ? 'currentCategory' : 'otherCategory';
 			$('#categoryContainer').append(
-				"<div class='category btn-circle " + css + "' style='z-index: " + (100 - idx) + "; top: 20px;'><a href='#'><span></span><em>" + cur + "</em></a></div>"
+				"<div class='category btn-circle " + css + "' style='z-index: " + (99 - idx) + "; top: 20px;'><a href='#'><span></span><em>" + cur + "</em></a></div>"
 			);
 		});
-		$('.otherCategory').css('opacity', 0);
+		// $('.otherCategory').css('opacity', 0);
+
+
+
 
 		//初始化动画队列
-		var top = 20;
-		var oterhCategoryLength = $('.otherCategory').length;
-		var elements = $('.otherCategory').toArray();
+		var gap = 10;
+		var top = parseInt($('.filter').css('top'));
+		var filterHeight = parseInt($('.filter a').css('height'));
+		var categoryHeight = filterHeight * 0.8;
+
+		var oterhCategoryLength = $('.category').length;
+		var elements = $('.category').toArray();
 		var length  = elements.length;
 		for(var i=0; i<length; i++)
 		{
@@ -191,10 +197,9 @@
 				(function(){
 					var index = i;
 					return function(){
-							$(elements.slice(index)).delay(400).animate(
+							$(elements.slice(index)).delay(100).animate(
 								{
-									top: top + gap*(index + 1),
-									opacity: 1
+									top: top + filterHeight + gap*(index + 1) + (categoryHeight + gap)*index
 								},
 								{
 									duration: 10
@@ -212,11 +217,11 @@
 			collapseQueue.push(
 				(function(){
 					var index = j;
+					var topValue = index == 0 ? top: top + filterHeight + gap*index + (categoryHeight + gap)*index;
 					return function(){
-					$(elements.slice(index)).delay(300).animate(
+					$(elements.slice(index)).delay(200).animate(
 						{
-							top: top + gap*index,
-							opacity: 0
+							top: topValue
 						},
 						{
 							duration: 10,
@@ -232,7 +237,7 @@
 		}
 
 		//注册点击处理函数
-		$('#categoryContainer .category a').click(function(event) {
+		$('#categoryContainer .filter a').click(function(event) {
 			event.preventDefault();
 			if (state == 'expanding' || state == 'collapsing')
 				return;
@@ -240,27 +245,40 @@
 				state = 'expanding';
 				$(document).queue("filter", expandQueue); //展开分类
 				$(document).dequeue("filter");
-				// expandCategoryItem(0, $('.otherCategory').toArray());
 				return;
 			}
 			if (state == 'expanded') {//打开状态
 				state = 'collapsing';
-
-				var selectedCategory = $(this).children('span').text();
-				var currentCategory = $('.currentCategory a span').text();
-				var elements = $('.otherCategory').toArray();
-				$('.currentCategory a span').text(selectedCategory);
-				$('.currentCategory a em').text(selectedCategory);
-				$(this).children('span').text(currentCategory);
-				$(this).children('em').text(currentCategory);
-
 				$(document).queue("filter", collapseQueue); //收起分类
 				$(document).dequeue("filter");
-				// collapase(elements.length - 1, elements); //收起分类
-				changePhoto(selectedCategory);
 				return;
 			}
+		})
 
+		$('#categoryContainer .category a').click(function(event) {
+			switch(state){
+				case 'expanding':
+				case 'collapsing':
+						return;
+				case 'collapased'://这种情况不应该发生
+						console.log('should not happen');
+						return;
+				case 'expanded':
+						state = 'collapsing';
+						var parent = $(this).parent();
+						if(parent.hasClass('currentCategory')) {//直接收起
+							$(document).queue("filter", collapseQueue);
+							$(document).dequeue("filter");
+						}
+						else {//先增删class，再收起
+							$('.currentCategory').removeClass('currentCategory').addClass('otherCategory');
+							$(this).parent().removeClass('otherCategory').addClass('currentCategory');
+							$(document).queue("filter", collapseQueue);
+							$(document).dequeue("filter");
+							changePhoto($('.currentCategory a span').text());
+						}
+						break;
+			}
 		})
 	}
 
@@ -385,7 +403,7 @@
 	function fetchPage(pageIdx) {
 		$.ajax({
       method: 'GET',
-      url: "http://localhost:8080/api/photos?page=" + pageIdx + "&size=" + pageSize + "",
+      url: "api/photos?page=" + pageIdx + "&size=" + pageSize + "",
     }).done(function(json){
 			var contents = json['content'];
 			for(var i=0; i< contents.length; i++) {
