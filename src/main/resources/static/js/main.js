@@ -188,7 +188,7 @@
 		var filterHeight = parseInt($('.filter a').css('height'));
 		var categoryHeight = filterHeight * 0.8;
 
-		var oterhCategoryLength = $('.category').length;
+		var otherCategoryLength = $('.category').length;
 		var elements = $('.category').toArray();
 		var length  = elements.length;
 		for(var i=0; i<length; i++)
@@ -197,15 +197,15 @@
 				(function(){
 					var index = i;
 					return function(){
-							$(elements.slice(index)).delay(100).animate(
+							$(elements.slice(index)).delay(200).animate(
 								{
 									top: top + filterHeight + gap*(index + 1) + (categoryHeight + gap)*index
 								},
 								{
-									duration: 10
+									duration: 100
 								}
 							).promise().done(function(){
-								if(index == oterhCategoryLength - 1 )
+								if(index == otherCategoryLength - 1 )
 									state = 'expanded';
 								$(document).dequeue("filter");
 							});
