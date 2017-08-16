@@ -167,6 +167,69 @@
 	var expandQueue = [];
 	var collapseQueue = [];
 
+	var expandAnimation = function() {
+		var gap = 10;
+		var top = parseInt($('.filter').css('top'));
+		var filterHeight = parseInt($('.filter a').css('height'));
+		var categoryHeight = filterHeight * 0.8;
+
+		var otherCategoryLength = $('.category').length;
+		var elements = $('.category').toArray();
+		var length  = elements.length;
+		function calculateExpandTop(index) {
+			var rst = top + filterHeight + gap*(index + 1) + (categoryHeight + gap)*index ;
+			return rst + "px";
+		}
+		var duration = 10;
+		var delay = 200;
+		$(elements.slice(0)).animate({top: calculateExpandTop(0)},	{duration: 100}).promise().done(function(){
+			return $(elements.slice(1)).delay(delay).animate({top: calculateExpandTop(1)},	{duration: duration}).promise();
+		}).done(function(){
+			return $(elements.slice(2)).delay(delay).animate({top: calculateExpandTop(2)},	{duration: duration}).promise();
+		}).done(function(){
+			return $(elements.slice(3)).delay(delay).animate({top: calculateExpandTop(3)},	{duration: duration}).promise();
+		}).done(function(){
+			return $(elements.slice(4)).delay(delay).animate({top: calculateExpandTop(4)},	{duration: duration}).promise();
+		}).done(function(){
+			state = 'expanded';
+		})
+	}
+
+	var collapseAnimation = function() {
+		var gap = 10;
+		var top = parseInt($('.filter').css('top'));
+		var filterHeight = parseInt($('.filter a').css('height'));
+		var categoryHeight = filterHeight * 0.8;
+
+		var otherCategoryLength = $('.category').length;
+		var elements = $('.category').toArray();
+		var length  = elements.length;
+		function calculateCollapaseTop(index) {
+			var rst;
+			if (index == 0) {
+				rst = top;
+			}else {
+				rst = top + filterHeight + gap*index + (categoryHeight + gap)*index;
+			}
+			return rst + "px";
+		}
+		var duration = 10;
+		var delay = 200;
+		$(elements.slice(4)).animate({top: calculateCollapaseTop(4)},	{duration: 100}).promise().done(function(){
+			return $(elements.slice(3)).delay(delay).animate({top: calculateCollapaseTop(3)},	{duration: duration}).promise();
+		}).done(function(){
+			return $(elements.slice(2)).delay(delay).animate({top: calculateCollapaseTop(2)},	{duration: duration}).promise();
+		}).done(function(){
+			return $(elements.slice(1)).delay(delay).animate({top: calculateCollapaseTop(1)},	{duration: duration}).promise();
+		}).done(function(){
+			return $(elements.slice(0)).delay(delay).animate({top: calculateCollapaseTop(0)},	{duration: duration}).promise();
+		}).done(function(){
+			state = 'collapased';
+		})
+
+	}
+
+
 	var initCategories = function() {
 
 		//页面首次加载时调用，生成分类列表
@@ -183,36 +246,33 @@
 
 
 		//初始化动画队列
-		var gap = 10;
-		var top = parseInt($('.filter').css('top'));
-		var filterHeight = parseInt($('.filter a').css('height'));
-		var categoryHeight = filterHeight * 0.8;
 
-		var otherCategoryLength = $('.category').length;
-		var elements = $('.category').toArray();
-		var length  = elements.length;
-		for(var i=0; i<length; i++)
-		{
-			expandQueue.push(
-				(function(){
-					var index = i;
-					return function(){
-							$(elements.slice(index)).delay(200).animate(
-								{
-									top: top + filterHeight + gap*(index + 1) + (categoryHeight + gap)*index
-								},
-								{
-									duration: 100
-								}
-							).promise().done(function(){
-								if(index == otherCategoryLength - 1 )
-									state = 'expanded';
-								$(document).dequeue("filter");
-							});
-				 }})()
-		);
-		}
 
+
+		//
+		// for(var i=0; i<length; i++)
+		// {
+		// 	expandQueue.push(
+		// 		(function(){
+		// 			var index = i;
+		// 			return function(){
+		// 					$(elements.slice(index)).delay(200).animate(
+		// 						{
+		// 							top: top + filterHeight + gap*(index + 1) + (categoryHeight + gap)*index
+		// 						},
+		// 						{
+		// 							duration: 100
+		// 						}
+		// 					).promise().done(function(){
+		// 						if(index == otherCategoryLength - 1 )
+		// 							state = 'expanded';
+		// 						$(document).dequeue("filter");
+		// 					});
+		// 		 }})()
+		// );
+		// }
+
+/*
 		for(var j = elements.length - 1; j >= 0; j--){
 			collapseQueue.push(
 				(function(){
@@ -235,6 +295,7 @@
 				}})()
 				);
 		}
+		*/
 
 		//注册点击处理函数
 		$('#categoryContainer .filter a').click(function(event) {
@@ -243,14 +304,16 @@
 				return;
 			if (state == 'collapased') { //收起状态
 				state = 'expanding';
-				$(document).queue("filter", expandQueue); //展开分类
-				$(document).dequeue("filter");
+				// $(document).queue("filter", expandQueue); //展开分类
+				// $(document).dequeue("filter");
+				expandAnimation();
 				return;
 			}
 			if (state == 'expanded') {//打开状态
 				state = 'collapsing';
-				$(document).queue("filter", collapseQueue); //收起分类
-				$(document).dequeue("filter");
+				// $(document).queue("filter", collapseQueue); //收起分类
+				// $(document).dequeue("filter");
+				collapseAnimation();
 				return;
 			}
 		})
@@ -267,14 +330,16 @@
 						state = 'collapsing';
 						var parent = $(this).parent();
 						if(parent.hasClass('currentCategory')) {//直接收起
-							$(document).queue("filter", collapseQueue);
-							$(document).dequeue("filter");
+							// $(document).queue("filter", collapseQueue);
+							// $(document).dequeue("filter");
+							collapseAnimation();
 						}
 						else {//先增删class，再收起
 							$('.currentCategory').removeClass('currentCategory').addClass('otherCategory');
 							$(this).parent().removeClass('otherCategory').addClass('currentCategory');
-							$(document).queue("filter", collapseQueue);
-							$(document).dequeue("filter");
+							// $(document).queue("filter", collapseQueue);
+							// $(document).dequeue("filter");
+							collapseAnimation();
 							changePhoto($('.currentCategory a span').text());
 						}
 						break;
