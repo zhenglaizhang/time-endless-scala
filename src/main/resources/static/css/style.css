@@ -144,11 +144,13 @@ h1, h2, h3, h4, h5, h6, figure {
   -o-transition: 0.5s;
   transition: 0.5s;
 }
-.category {
+.category_wrapper {
   position: fixed;
   top: 20px;
   right: 30px;
   z-index: 90;
+}
+.category {
   -webkit-transition: 0.5s;
   -o-transition: 0.5s;
   transition: 0.5s;

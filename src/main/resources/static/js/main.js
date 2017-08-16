@@ -164,67 +164,68 @@
 	var categories = ['All', 'Nature', 'Portrait', 'Activity', 'Other'];
 	//collapased, expanding, expanded,collapsing,
 	var state = 'collapased';
-	var expandQueue = [];
-	var collapseQueue = [];
+
+	var gap = 10;
+	var top;
+	var filterHeight;
+	var categoryHeight;
+
+	function calculateExpandTop(index) {
+		var rst = top + filterHeight + gap + (categoryHeight + gap)*index ;
+		console.log(`expand index:${index}  rst: ${rst} top: ${top}  filterHeight: ${filterHeight}  gap: ${gap}  categoryHeight: ${categoryHeight}` );
+		return rst;
+	}
+
+	function calculateCollapaseTop(index) {
+		var rst;
+		if (index == 0) {
+			rst = top;
+		}else {
+			rst = top + filterHeight + gap + (categoryHeight + gap)*index - gap - categoryHeight;
+			console.log(`collapse index:${index}  rst: ${rst} top: ${top}  filterHeight: ${filterHeight}  gap: ${gap}  categoryHeight: ${categoryHeight}` );
+		}
+		return rst;
+	}
 
 	var expandAnimation = function() {
-		var gap = 10;
-		var top = parseInt($('.filter').css('top'));
-		var filterHeight = parseInt($('.filter a').css('height'));
-		var categoryHeight = filterHeight * 0.8;
-
-		var otherCategoryLength = $('.category').length;
-		var elements = $('.category').toArray();
-		var length  = elements.length;
-		function calculateExpandTop(index) {
-			var rst = top + filterHeight + gap*(index + 1) + (categoryHeight + gap)*index ;
-			return rst + "px";
-		}
-		var duration = 10;
-		var delay = 200;
-		$(elements.slice(0)).animate({top: calculateExpandTop(0)},	{duration: 100}).promise().done(function(){
-			return $(elements.slice(1)).delay(delay).animate({top: calculateExpandTop(1)},	{duration: duration}).promise();
-		}).done(function(){
-			return $(elements.slice(2)).delay(delay).animate({top: calculateExpandTop(2)},	{duration: duration}).promise();
-		}).done(function(){
-			return $(elements.slice(3)).delay(delay).animate({top: calculateExpandTop(3)},	{duration: duration}).promise();
-		}).done(function(){
-			return $(elements.slice(4)).delay(delay).animate({top: calculateExpandTop(4)},	{duration: duration}).promise();
+		var elements = $('.category_wrapper').toArray();
+		var duration = 100;
+		$(elements.slice(0)).animate({top: calculateExpandTop(0)},	{duration: duration}).promise().then(function(){
+			console.log('expand pos1');
+			return $(elements.slice(1)).animate({top: calculateExpandTop(1)},	{duration: duration}).promise();
+		}).then(function(){
+			console.log('expand pos2');
+			return $(elements.slice(2)).animate({top: calculateExpandTop(2)},	{duration: duration}).promise();
+		}).then(function(){
+			console.log('expand pos3');
+			return $(elements.slice(3)).animate({top: calculateExpandTop(3)},	{duration: duration}).promise();
+		}).then(function(){
+			console.log('expand pos4');
+			return $(elements.slice(4)).animate({top: calculateExpandTop(4)},	{duration: duration}).promise();
 		}).done(function(){
 			state = 'expanded';
+			console.log('expandAnimation completed!');
 		})
 	}
 
 	var collapseAnimation = function() {
-		var gap = 10;
-		var top = parseInt($('.filter').css('top'));
-		var filterHeight = parseInt($('.filter a').css('height'));
-		var categoryHeight = filterHeight * 0.8;
-
-		var otherCategoryLength = $('.category').length;
-		var elements = $('.category').toArray();
-		var length  = elements.length;
-		function calculateCollapaseTop(index) {
-			var rst;
-			if (index == 0) {
-				rst = top;
-			}else {
-				rst = top + filterHeight + gap*index + (categoryHeight + gap)*index;
-			}
-			return rst + "px";
-		}
-		var duration = 10;
-		var delay = 200;
-		$(elements.slice(4)).animate({top: calculateCollapaseTop(4)},	{duration: 100}).promise().done(function(){
-			return $(elements.slice(3)).delay(delay).animate({top: calculateCollapaseTop(3)},	{duration: duration}).promise();
-		}).done(function(){
-			return $(elements.slice(2)).delay(delay).animate({top: calculateCollapaseTop(2)},	{duration: duration}).promise();
-		}).done(function(){
-			return $(elements.slice(1)).delay(delay).animate({top: calculateCollapaseTop(1)},	{duration: duration}).promise();
-		}).done(function(){
-			return $(elements.slice(0)).delay(delay).animate({top: calculateCollapaseTop(0)},	{duration: duration}).promise();
+		var elements = $('.category_wrapper').toArray();
+		var duration = 100;
+		$(elements.slice(4)).animate({top: calculateCollapaseTop(4)},	{duration: duration}).promise().then(function(){
+			console.log('collapse pos4');
+			return $(elements.slice(3)).animate({top: calculateCollapaseTop(3)},	{duration: duration}).promise();
+		}).then(function(){
+			console.log('collapse pos3');
+			return $(elements.slice(2)).animate({top: calculateCollapaseTop(2)},	{duration: duration}).promise();
+		}).then(function(){
+			console.log('collapse pos2');
+			return $(elements.slice(1)).animate({top: calculateCollapaseTop(1)},	{duration: duration}).promise();
+		}).then(function(){
+			console.log('collapse pos1');
+			return $(elements.slice(0)).animate({top: calculateCollapaseTop(0)},	{duration: duration}).promise();
 		}).done(function(){
 			state = 'collapased';
+			console.log('collapseAnimation completed!');
 		})
 
 	}
@@ -237,65 +238,14 @@
 			var currentCategory = 'All';
 			var css = cur == currentCategory ? 'currentCategory' : 'otherCategory';
 			$('#categoryContainer').append(
-				"<div class='category btn-circle " + css + "' style='z-index: " + (99 - idx) + "; top: 20px;'><a href='#'><span></span><em>" + cur + "</em></a></div>"
+				"<div class='category_wrapper' style='z-index:" + (99 - idx) +" ; top: 20px;'><div class='category btn-circle " + css + "'><a href='#'><span></span><em>" + cur + "</em></a></div></div>"
 			);
 		});
+
+		top = parseInt($('.filter').css('top'));
+		filterHeight = parseInt($('.filter a').css('height'));
+		categoryHeight = parseInt($('.category a').first().css('height'));
 		// $('.otherCategory').css('opacity', 0);
-
-
-
-
-		//初始化动画队列
-
-
-
-		//
-		// for(var i=0; i<length; i++)
-		// {
-		// 	expandQueue.push(
-		// 		(function(){
-		// 			var index = i;
-		// 			return function(){
-		// 					$(elements.slice(index)).delay(200).animate(
-		// 						{
-		// 							top: top + filterHeight + gap*(index + 1) + (categoryHeight + gap)*index
-		// 						},
-		// 						{
-		// 							duration: 100
-		// 						}
-		// 					).promise().done(function(){
-		// 						if(index == otherCategoryLength - 1 )
-		// 							state = 'expanded';
-		// 						$(document).dequeue("filter");
-		// 					});
-		// 		 }})()
-		// );
-		// }
-
-/*
-		for(var j = elements.length - 1; j >= 0; j--){
-			collapseQueue.push(
-				(function(){
-					var index = j;
-					var topValue = index == 0 ? top: top + filterHeight + gap*index + (categoryHeight + gap)*index;
-					return function(){
-					$(elements.slice(index)).delay(200).animate(
-						{
-							top: topValue
-						},
-						{
-							duration: 10,
-							easing: 'linear'
-						}
-					).promise().done(function(){
-						if(index == 0)
-							state = 'collapased';
-						$(document).dequeue("filter");
-					});
-				}})()
-				);
-		}
-		*/
 
 		//注册点击处理函数
 		$('#categoryContainer .filter a').click(function(event) {
@@ -304,15 +254,11 @@
 				return;
 			if (state == 'collapased') { //收起状态
 				state = 'expanding';
-				// $(document).queue("filter", expandQueue); //展开分类
-				// $(document).dequeue("filter");
 				expandAnimation();
 				return;
 			}
 			if (state == 'expanded') {//打开状态
 				state = 'collapsing';
-				// $(document).queue("filter", collapseQueue); //收起分类
-				// $(document).dequeue("filter");
 				collapseAnimation();
 				return;
 			}
@@ -330,15 +276,11 @@
 						state = 'collapsing';
 						var parent = $(this).parent();
 						if(parent.hasClass('currentCategory')) {//直接收起
-							// $(document).queue("filter", collapseQueue);
-							// $(document).dequeue("filter");
 							collapseAnimation();
 						}
 						else {//先增删class，再收起
 							$('.currentCategory').removeClass('currentCategory').addClass('otherCategory');
 							$(this).parent().removeClass('otherCategory').addClass('currentCategory');
-							// $(document).queue("filter", collapseQueue);
-							// $(document).dequeue("filter");
 							collapseAnimation();
 							changePhoto($('.currentCategory a span').text());
 						}
