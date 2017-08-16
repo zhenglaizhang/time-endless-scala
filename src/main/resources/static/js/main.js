@@ -245,6 +245,9 @@
 		top = parseInt($('.filter').css('top'));
 		filterHeight = parseInt($('.filter a').css('height'));
 		categoryHeight = parseInt($('.category a').first().css('height'));
+		if(isMobile.any()){ //移动端gap
+			gap = 5;
+		}
 		// $('.otherCategory').css('opacity', 0);
 
 		//注册点击处理函数
