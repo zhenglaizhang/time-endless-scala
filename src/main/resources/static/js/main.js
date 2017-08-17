@@ -404,7 +404,7 @@
 
 	var currentPageIdx = -1;
 	var hasMore = true;
-	var pageSize = 12; //pc端pageSize
+	var pageSize = 24; //pc端pageSize
 
 	function fetchPage(pageIdx) {
 		$.ajax({
