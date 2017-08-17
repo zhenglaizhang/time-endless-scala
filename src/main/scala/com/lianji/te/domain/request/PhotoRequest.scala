@@ -8,7 +8,7 @@ import com.lianji.te.domain.Category
 import org.springframework.web.multipart.MultipartFile
 
 case class PhotoRequest(
-  @BeanProperty @Enumerated(EnumType.ORDINAL) var category: Category,
+  @BeanProperty @Enumerated(EnumType.STRING) var category: java.util.List[Category],
   @BeanProperty var name: String,
   @BeanProperty var description: String,
   @BeanProperty var index: MultipartFile,

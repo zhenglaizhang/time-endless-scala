@@ -3,6 +3,7 @@ package com.lianji.te.domain
 import java.lang.Long
 import java.time.LocalDate
 import javax.persistence._
+import java.util.List
 
 import scala.annotation.meta.field
 import scala.beans.BeanProperty
@@ -13,7 +14,14 @@ import org.hibernate.validator.constraints.NotEmpty
 @Entity
 case class Photo(
   @BeanProperty @(Id@field) @(GeneratedValue@field) var id: Long = null,
-  @BeanProperty @Enumerated(EnumType.ORDINAL) var category: Category = null,
+
+//  @BeanProperty
+//  @(NotEmpty@field)
+//  @CollectionTable(name = "photo_category", joinColumns = Array(new JoinColumn(name = "photo_id")))
+//  @Column
+//  @ElementCollection(targetClass = classOf[Category])
+//  @Enumerated(EnumType.STRING) var category: List[Category] = null,
+  @BeanProperty @(NotEmpty@field) var category: String = null,
   @BeanProperty @(NotEmpty@field) var name: String = null,
   @BeanProperty @(NotEmpty@field) var description: String = null,
   @BeanProperty var dateTimeOriginal: LocalDate = null,

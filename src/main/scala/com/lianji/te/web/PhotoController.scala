@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation._
 @Controller
 @RequestMapping(Array("/photos"))
 class PhotoController @Autowired()(
-  private val photoRepository: PhotoRepository,
-  // TODO: auto bean injection!
-  private val photoMetaService: PhotoMetadataService = new PhotoMetadataService,
-  val photoService: PhotoService
-) {
+                                    private val photoRepository: PhotoRepository,
+                                    // TODO: auto bean injection!
+                                    private val photoMetaService: PhotoMetadataService = new PhotoMetadataService,
+                                    val photoService: PhotoService
+                                  ) {
   private[this] val log = LoggerFactory.getLogger(getClass)
 
   private[this] val BUTTONS_TO_SHOW = 5
@@ -43,10 +43,10 @@ class PhotoController @Autowired()(
 
   @GetMapping(Array("/view"))
   def showPersonsPage(
-    @RequestParam("category") category: Optional[String],
-    @RequestParam("pageSize") pageSize: Optional[Integer],
-    @RequestParam("page") page: Optional[Integer]
-  ) = {
+                       @RequestParam("category") category: Optional[String],
+                       @RequestParam("pageSize") pageSize: Optional[Integer],
+                       @RequestParam("page") page: Optional[Integer]
+                     ) = {
     val modelAndView = new ModelAndView("photos")
     val evalPageSize = pageSize.orElse(INITIAL_PAGE_SIZE)
     val evalPage = if (page.orElse(0) < 1) INITIAL_PAGE else page.get - 1
@@ -75,8 +75,8 @@ class PhotoController @Autowired()(
   @GetMapping(Array("/{category}"))
   @ResponseBody
   def getByCategory(
-    @PathVariable(value = "category") category: Category
-  ): lang.Iterable[Photo] = {
+                     @PathVariable(value = "category") category: Category
+                   ): lang.Iterable[Photo] = {
     val photos = photoRepository.findByCategory(category)
     photos
   }
@@ -109,17 +109,18 @@ class PhotoController @Autowired()(
     val photo = photoMetaService
       .getPhoto(req.category, req.name, req.description, url = "dummy", req.file.getInputStream)
     val savedPhoto = photoRepository.save(photo)
-    val sizedInputStream = photoMetaService.crapImgInputStream(req.file.getInputStream)
+    val sizedInputStream = photoMetaService.crapImgInputStream(req.file.getInputStream, 1920)
     val oss = new OssService(endpoint, id, secret)
     oss.setBucketPublicReadable(bucket)
 
     // upload img
-    val key = s"${ req.category.name }/${ savedPhoto.id }.jpg"
+    val key = s"${req.category.get(0).name}/${savedPhoto.id}.jpg"
     oss.uploadJpg(bucket, key, sizedInputStream)
 
     // upload index
-    val key_index = s"${req.category.name}/${savedPhoto.id}_index.jpg"
-    oss.uploadJpg(bucket, key_index, req.index.getInputStream)
+    val key_index = s"${req.category.get(0).name}/${savedPhoto.id}_index.jpg"
+    val sizedIndex = photoMetaService.crapImgInputStream(req.index.getInputStream, 960)
+    oss.uploadJpg(bucket, key_index, sizedIndex)
 
     photo.url = s"http://$bucket.$endpoint/$key"
     photo.url_index = s"http://$bucket.$endpoint/$key_index"

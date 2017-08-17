@@ -13,9 +13,11 @@ class PhotoServiceImpl @Autowired()(
 ) extends PhotoService {
 
   @Transactional
-  override def findAllPageable(pageable: Pageable, category: Category): Page[Photo] = {
-    photoRepository.findByCategory(category, pageable)
+  override def findAllPageable(pageable: Pageable, category: String): Page[Photo] = {
+    photoRepository.findByCategoryContaining(category, pageable)
   }
 
   override def findAllPageable(pageable: Pageable): Page[Photo] = photoRepository.findAll(pageable)
+
+  override def findAllPageable(pageable: Pageable, category: Category) = photoRepository.findByCategoryContaining(category.toString, pageable)
 }

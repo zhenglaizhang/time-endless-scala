@@ -33,13 +33,17 @@
                             <!--<option th:each="category:${T(com.lianji.te.domain.Category).values()}" th:value="${{category.value}}"-->
                             <!--th:text="${{category.value}}"></option>-->
                             <!--</select>-->
-                            <select class="form-control" th:field="*{{category}}">
-                                <option th:each="category : ${T(com.lianji.te.domain.Category).values()}"
-                                        th:value="${{category}}"
-                                        th:selected="${category == T(com.lianji.te.domain.Category)}"
-                                        th:text="${category}">
-                                </option>
-                            </select>
+                            <!--<select class="form-control" th:field="*{{category}}">-->
+                            <!--<option th:each="category : ${T(com.lianji.te.domain.Category).values()}"-->
+                            <!--th:value="${{category}}"-->
+                            <!--th:selected="${category == T(com.lianji.te.domain.Category)}"-->
+                            <!--th:text="${category}">-->
+                            <!--</option>-->
+                            <!--</select>-->
+                            <div th:each="category:${T(com.lianji.te.domain.Category).values()}">
+                                <input type="checkbox" th:id="${{category}}" th:value="${{category}}" th:field="*{category}"/>
+                                <label th:for="${{category}}" th:text="${category}">Shipping Types</label>
+                            </div>
                         </div>
                     </div>
 

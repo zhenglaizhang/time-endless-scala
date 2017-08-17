@@ -3,6 +3,7 @@ package com.lianji.te.service
 import java.awt.image.BufferedImage
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
 import javax.imageio.ImageIO
+import scala.collection.JavaConverters._
 
 import com.drew.imaging.ImageMetadataReader
 import com.drew.metadata.exif.{ExifDirectoryBase, ExifIFD0Directory, ExifSubIFDDescriptor, ExifSubIFDDirectory}
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class PhotoMetadataService {
-  def getPhoto(category: Category, name: String, desc: String, url: String, inputStream: InputStream): Photo = {
+  def getPhoto(category: java.util.List[Category], name: String, desc: String, url: String, inputStream: InputStream): Photo = {
     val metadata = ImageMetadataReader.readMetadata(inputStream)
     val exifDir = metadata.getFirstDirectoryOfType(classOf[ExifSubIFDDirectory])
     val exifDesc = new ExifSubIFDDescriptor(exifDir)
@@ -36,46 +37,45 @@ class PhotoMetadataService {
     val apertureValue = exifDesc.getApertureValueDescription
     val maxApertureValue = exifDesc.getMaxApertureValueDescription
     val focalLength = exifDesc.getFocalLengthDescription
-    Photo(
-      id = null,
-      category = category,
-      name = name,
-      description = desc,
-      dateTimeOriginal = new java.sql.Date(originalDate.getTime).toLocalDate,
-      width = width,
-      height = height,
-      exposureTime = exposureTime,
-      meteringMode = meteringMode,
-      exposureProgram = exposureProgram,
-      fNumber = fNumber,
-      model = model,
-      make = make,
-      copyright = copyright,
-      isoSpeedRatings = iso,
-      apertureValue = apertureValue,
-      maxApertureValue = maxApertureValue,
-      focalLength = focalLength,
-      url = url,
-      url_index = url
-    )
+    Photo(id = null,
+           category = category.asScala.mkString(","),
+           name = name,
+           description = desc,
+           dateTimeOriginal = new java.sql.Date(originalDate.getTime).toLocalDate,
+           width = width,
+           height = height,
+           exposureTime = exposureTime,
+           meteringMode = meteringMode,
+           exposureProgram = exposureProgram,
+           fNumber = fNumber,
+           model = model,
+           make = make,
+           copyright = copyright,
+           isoSpeedRatings = iso,
+           apertureValue = apertureValue,
+           maxApertureValue = maxApertureValue,
+           focalLength = focalLength,
+           url = url,
+           url_index = url)
   }
 
-  def crapImgInputStream(inputStream: InputStream): ByteArrayInputStream = {
-    val img = resize(inputStream)
+  def crapImgInputStream(inputStream: InputStream, size: Int): ByteArrayInputStream = {
+    val img = resize(inputStream, size)
     val os = new ByteArrayOutputStream()
     ImageIO.write(img, "gif", os)
     new ByteArrayInputStream(os.toByteArray)
   }
 
-  def resize(inputStream: InputStream): BufferedImage = {
-    resize(ImageIO.read(inputStream))
+  def resize(inputStream: InputStream, size: Int): BufferedImage = {
+    resize(ImageIO.read(inputStream), size)
   }
 
-  def resize(img: BufferedImage): BufferedImage = {
-    Scalr.resize(img, 1920)
+  def resize(img: BufferedImage, size: Int): BufferedImage = {
+    Scalr.resize(img, size)
   }
 
-  def createThumbnail(img: BufferedImage): BufferedImage = { // Create quickly, then smooth and brighten it.
+  def createThumbnail(img: BufferedImage): BufferedImage = {
+    // Create quickly, then smooth and brighten it.
     val image = Scalr.resize(img, Method.SPEED, 125, OP_ANTIALIAS, OP_BRIGHTER)
     Scalr.pad(image, 4)
     // Let's add a little border before we return result.

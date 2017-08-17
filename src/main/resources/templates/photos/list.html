@@ -85,10 +85,11 @@
                         <th>F-Number</th>
                         <th>Model</th>
                         <th>Make</th>
-                        <th>Copyright</th>
-                        <th>Aperture</th>
-                        <th>Max Aperture</th>
-                        <th>Focal Length</th>
+                        <th>Operation</th>
+                        <!--<th>Copyright</th>-->
+                        <!--<th>Aperture</th>-->
+                        <!--<th>Max Aperture</th>-->
+                        <!--<th>Focal Length</th>-->
                         <!--<th>Url</th>-->
                         <!--<th></th>-->
                     </tr>
@@ -109,14 +110,15 @@
                         <td th:text="${photo.fNumber}">1</td>
                         <td th:text="${photo.model}">1</td>
                         <td th:text="${photo.make}">1</td>
-                        <td th:text="${photo.copyright}">1</td>
-                        <td th:text="${photo.apertureValue}">1</td>
-                        <td th:text="${photo.maxApertureValue}">1</td>
-                        <td th:text="${photo.focalLength}">1</td>
+                        <!--<td th:text="${photo.copyright}">1</td>-->
+                        <!--<td th:text="${photo.apertureValue}">1</td>-->
+                        <!--<td th:text="${photo.maxApertureValue}">1</td>-->
+                        <!--<td th:text="${photo.focalLength}">1</td>-->
                         <!--<td th:text="${photo.url}">1</td>-->
-                        <!--<td><a th:href="@{/photos/edit/__${photo.id}__}" href="#">Edit</a>-->
-                            <!--| <a th:href="@{/photos/delete/__${photo.id}__}" href="#">Delete</a>-->
-                        <!--</td>-->
+                        <!--<td><a th:href="@{/photos/edit/__${photo.id}__}" href="#">Edit</a>|-->
+                        <td>
+                            <a th:href="@{/photos/delete/__${photo.id}__}" href="#">Delete</a>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
