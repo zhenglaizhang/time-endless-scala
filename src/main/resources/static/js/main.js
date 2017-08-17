@@ -307,11 +307,13 @@
 									var effect = el.data('photo');
 									if (effect.indexOf(status) != -1 || status == "All") {
 											el.css('display', 'block');
+											magnifPopup();
 											setTimeout(function () {
 													el.addClass('fadeIn animated-fast');
 											}, k * 50, 'easeInOutExpo');
 									} else {
 										el.css('display', 'none');
+										magnifPopup();
 									}
 							});
 					}, 50);
@@ -358,7 +360,12 @@
 
 	  // MagnificPopup
 		var magnifPopup = function() {
-			$('.image-popup').magnificPopup({
+			$('.image-popup').filter(function(index){
+				if($(this).parent().css('display') == 'none')
+					return false;
+				else
+					return true;
+			}).magnificPopup({
 				type: 'image',
 				removalDelay: 300,
 				mainClass: 'mfp-with-zoom',
