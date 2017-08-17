@@ -186,6 +186,7 @@ h1, h2, h3, h4, h5, h6, figure {
   height: 80px;
   line-height: 80px;
   font-size: 10px;
+  text-transform: none;
 }
 
 .aside-toggle a:hover, .aside-toggle a:active, .aside-toggle a:focus, .filter a:hover, .filter a:active, .filter a:focus, .category a:hover, .category a:active, .category a:focus {
@@ -235,7 +236,7 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 
 .currentCategory a {
-  background: #d3387b;
+  background: #fff;
 }
 
 .aside-toggle a em, .filter a em, .category a em {
