@@ -289,7 +289,7 @@
 			$('body .grid-photo').each(function (k) {
 					var el = $(this);
 					var effect = el.data('photo');
-					if (effect == status) {
+					if (effect.indexOf(status) != -1) {
 							el.removeClass('fadeIn animated-fast');
 					} else {
 							el.removeClass('fadeIn animated-fast');
@@ -305,12 +305,13 @@
 							$('body .grid-photo').each(function (k) {
 									var el = $(this);
 									var effect = el.data('photo');
-									if (effect == status || status == "All") {
+									if (effect.indexOf(status) != -1 || status == "All") {
+											el.css('display', 'block');
 											setTimeout(function () {
 													el.addClass('fadeIn animated-fast');
 											}, k * 50, 'easeInOutExpo');
 									} else {
-
+										el.css('display', 'none');
 									}
 							});
 					}, 50);
