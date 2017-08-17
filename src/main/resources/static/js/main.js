@@ -172,7 +172,6 @@
 
 	function calculateExpandTop(index) {
 		var rst = top + filterHeight + gap + (categoryHeight + gap)*index ;
-		console.log(`expand index:${index}  rst: ${rst} top: ${top}  filterHeight: ${filterHeight}  gap: ${gap}  categoryHeight: ${categoryHeight}` );
 		return rst;
 	}
 
@@ -182,7 +181,6 @@
 			rst = top;
 		}else {
 			rst = top + filterHeight + gap + (categoryHeight + gap)*index - gap - categoryHeight;
-			console.log(`collapse index:${index}  rst: ${rst} top: ${top}  filterHeight: ${filterHeight}  gap: ${gap}  categoryHeight: ${categoryHeight}` );
 		}
 		return rst;
 	}
@@ -191,20 +189,15 @@
 		var elements = $('.category_wrapper').toArray();
 		var duration = 100;
 		$(elements.slice(0)).animate({top: calculateExpandTop(0)},	{duration: duration}).promise().then(function(){
-			console.log('expand pos1');
 			return $(elements.slice(1)).animate({top: calculateExpandTop(1)},	{duration: duration}).promise();
 		}).then(function(){
-			console.log('expand pos2');
 			return $(elements.slice(2)).animate({top: calculateExpandTop(2)},	{duration: duration}).promise();
 		}).then(function(){
-			console.log('expand pos3');
 			return $(elements.slice(3)).animate({top: calculateExpandTop(3)},	{duration: duration}).promise();
 		}).then(function(){
-			console.log('expand pos4');
 			return $(elements.slice(4)).animate({top: calculateExpandTop(4)},	{duration: duration}).promise();
 		}).done(function(){
 			state = 'expanded';
-			console.log('expandAnimation completed!');
 		})
 	}
 
@@ -212,20 +205,15 @@
 		var elements = $('.category_wrapper').toArray();
 		var duration = 100;
 		$(elements.slice(4)).animate({top: calculateCollapaseTop(4)},	{duration: duration}).promise().then(function(){
-			console.log('collapse pos4');
 			return $(elements.slice(3)).animate({top: calculateCollapaseTop(3)},	{duration: duration}).promise();
 		}).then(function(){
-			console.log('collapse pos3');
 			return $(elements.slice(2)).animate({top: calculateCollapaseTop(2)},	{duration: duration}).promise();
 		}).then(function(){
-			console.log('collapse pos2');
 			return $(elements.slice(1)).animate({top: calculateCollapaseTop(1)},	{duration: duration}).promise();
 		}).then(function(){
-			console.log('collapse pos1');
 			return $(elements.slice(0)).animate({top: calculateCollapaseTop(0)},	{duration: duration}).promise();
 		}).done(function(){
 			state = 'collapased';
-			console.log('collapseAnimation completed!');
 		})
 
 	}
@@ -308,7 +296,7 @@
 					}
 			});
 			setTimeout(function () {
-					if (status == "all") {
+					if (status == "All") {
 							$grid.isotope({filter: "*"});
 					} else {
 							$grid.isotope({filter: "." + status});
@@ -317,7 +305,7 @@
 							$('body .grid-photo').each(function (k) {
 									var el = $(this);
 									var effect = el.data('photo');
-									if (effect == status || status == "all") {
+									if (effect == status || status == "All") {
 											setTimeout(function () {
 													el.addClass('fadeIn animated-fast');
 											}, k * 50, 'easeInOutExpo');
@@ -426,15 +414,6 @@
 			isFetching = false;
 			magnifPopup();//对新增的元素设置popup
 			changePhoto($('.currentCategory a span').text());//过滤新增的元素
-			// $('.grid a').magnificPopup({
-	    //   type: 'image',
-	    //   gallery: {
-	    //     enable: true,
-	    //     navigateByImgClick: true,
-			// 		preload: [0, 1]
-	    //   }
-	    // }
-	    // );
     });
 	}
 
