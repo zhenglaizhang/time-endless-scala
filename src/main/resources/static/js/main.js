@@ -280,10 +280,6 @@
 		})
 	}
 
-	function sleep (time) {
-	  return new Promise((resolve) => setTimeout(resolve, time));
-	}
-
 	function changePhoto(status) {
 			$("#Menu").click();
 			$('body .grid-photo').each(function (k) {
