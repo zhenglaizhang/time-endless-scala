@@ -266,7 +266,7 @@
 				case 'expanded':
 						state = 'collapsing';
 						var parent = $(this).parent();
-						if(parent.hasClass('currentCategory')) {//直接收起
+						if(parent.hasClass('currentCategory') || imageLoaded == false) {//直接收起
 							collapseAnimation();
 						}
 						else {//先增删class，再收起
@@ -281,15 +281,9 @@
 	}
 
 	function changePhoto(status) {
-			$("#Menu").click();
 			$('body .grid-photo').each(function (k) {
 					var el = $(this);
-					var effect = el.data('photo');
-					if (effect.indexOf(status) != -1) {
-							el.removeClass('fadeIn animated-fast');
-					} else {
-							el.removeClass('fadeIn animated-fast');
-					}
+					el.removeClass('fadeIn animated-fast');
 			});
 			setTimeout(function () {
 					if (status == "All") {
@@ -302,14 +296,10 @@
 									var el = $(this);
 									var effect = el.data('photo');
 									if (effect.indexOf(status) != -1 || status == "All") {
-											el.css('display', 'block');
-											magnifPopup();
 											setTimeout(function () {
 													el.addClass('fadeIn animated-fast');
+													magnifPopup();
 											}, k * 50, 'easeInOutExpo');
-									} else {
-										el.css('display', 'none');
-										magnifPopup();
 									}
 							});
 					}, 50);
@@ -317,107 +307,96 @@
 	}
 
 	function getPhotoDiv(category, smallUrl, largeUrl, name, description) {
+		var categoryValue = category.split(',').join(' ');
 		return "\
-		<div class='grid-photo grid-item item animate-box fadeIn animated-fast " + category + "' data-animate-effect='fadeIn' data-photo='" + category + "'>\
+		<div class='grid-photo grid-item item animate-box fadeIn animated-fast " + categoryValue + "' data-animate-effect='fadeIn' data-photo='" + category + "'>\
 					    <a href='" + largeUrl + "' class='image-popup' title='" + name + "'>\
 					        <div class='img-wrap'>\
 					            <img src='" + smallUrl + "' alt='' class='img-responsive'>\
 					        </div>\
-									<div class='text-wrap'>\
-											<div class='text-inner popup'>\
-													<div>\
-															<h2>" + name + "</h2>\
-															<span>" + description + "</span>\
-													</div>\
-											</div>\
-									</div>\
 							</a>\
 						</div>\
 		"
-		// return `
-		// <div class='grid-photo grid-item item animate-box fadeIn animated-fast ${category}' data-animate-effect='fadeIn' data-photo='${category}'>
-		// 			    <a href='${largeUrl}' class='image-popup' title='${name}'>
-		// 			        <div class='img-wrap'>
-		// 			            <img src='${smallUrl}' alt='' class='img-responsive'>
-		// 			        </div>
-		// 							<div class='text-wrap'>
-		// 									<div class='text-inner popup'>
-		// 											<div>
-		// 													<h2>${name}</h2>
-		// 													<span>${description}</span>
-		// 											</div>
-		// 									</div>
-		// 							</div>
-		// 					</a>
-		// 				</div>
-		// `
 	}
 
 
 	  // MagnificPopup
 		var magnifPopup = function() {
 			$('.image-popup').filter(function(index){
-				if($(this).parent().css('display') == 'none')
-					return false;
-				else
+				var currentCategory = $('.currentCategory a span').text();
+				if(currentCategory == 'All')
 					return true;
+				else {
+					if($(this).parent().hasClass(currentCategory))
+						return true;
+					else
+						return false;
+				}
 			}).magnificPopup({
 				type: 'image',
-				removalDelay: 300,
-				mainClass: 'mfp-with-zoom',
-				gallery:{
-					enabled:true
+				fixedContentPos: true,
+				fixedBgPos: true,
+				overflowY: 'auto',
+				tLoading: 'Loading image ...',
+				mainClass: 'mfp-img-mobile',
+				gallery: {
+					enabled: true,
+					navigateByImgClick: true,
+					preload: [0,1] // Will preload 0 - before current, and 1 after the current image
 				},
-				zoom: {
-					enabled: true, // By default it's false, so don't forget to enable it
-
-					duration: 300, // duration of the effect, in milliseconds
-					easing: 'ease-in-out', // CSS transition easing function
-
-					// The "opener" function should return the element from which popup will be zoomed in
-					// and to which popup will be scaled down
-					// By defailt it looks for an image tag:
-					opener: function(openerElement) {
-					// openerElement is the element on which popup was initialized, in this case its <a> tag
-					// you don't need to add "opener" option if this code matches your needs, it's defailt one.
-					return openerElement.is('img') ? openerElement : openerElement.find('img');
+				image: {
+					tError: 'The image could not be loaded.',
+					titleSrc: function(item) {
+						return item.el.attr('title');
 					}
 				}
 			});
 		};
 
-		var magnifVideo = function() {
-			$('.popup-youtube, .popup-vimeo, .popup-gmaps').magnificPopup({
-	        disableOn: 700,
-	        type: 'iframe',
-	        mainClass: 'mfp-fade',
-	        removalDelay: 160,
-	        preloader: false,
-
-	        fixedContentPos: false
-	    });
-		};
 
 	var currentPageIdx = -1;
 	var hasMore = true;
 	var pageSize = 24; //pc端pageSize
+	var $grid;
 
+	var imageLoaded = false;
 	function fetchPage(pageIdx) {
 		$.ajax({
       method: 'GET',
       url: "api/photos?page=" + pageIdx + "&size=" + pageSize + "",
     }).done(function(json){
 			var contents = json['content'];
+			var content, photoDiv, $photoDiv;
+
 			for(var i=0; i< contents.length; i++) {
-				var content = contents[i];
-				var divStr = getPhotoDiv(content.category, content.url_index, content.url, content.name, content.description);
-				$('.grid').append(divStr);
+				content = contents[i];
+				photoDiv = getPhotoDiv(content.category, content.url_index, content.url, content.name, content.description);
+				$photoDiv = $(photoDiv);
+				$('.grid').append(photoDiv);//.isotope( 'appended', $photoDiv );
 			}
+			//对所有元素设置popup
+			magnifPopup();
+
+			$('.grid').imagesLoaded().progress(function () {
+				//新数据到达后，重新构建isotope
+				$('.grid').isotope('destroy');
+				$grid = $('.grid').isotope(isoOptions);
+				//过滤元素
+				var currentCategory = $('.currentCategory a span').text();
+				var filter;
+				if(currentCategory == 'All')
+					filter = "*";
+				else {
+					filter = "." + currentCategory;
+				}
+				$grid.isotope({filter: filter});
+	    }).always(function(){
+				imageLoaded = true;
+			});
+
 			currentPageIdx += 1;
 			hasMore = !json.last;
 			isFetching = false;
-			magnifPopup();//对新增的元素设置popup
-			changePhoto($('.currentCategory a span').text());//过滤新增的元素
     });
 	}
 
@@ -431,6 +410,7 @@
 				console.log('bottom reached!');
 				if(hasMore && !isFetching) {
 					isFetching = true;
+					imageLoaded = false;
 					fetchPage(currentPageIdx + 1);
 				}
 			},
@@ -438,15 +418,26 @@
 		})
 	}
 
+	var isoOptions = {
+		itemSelector: '.grid-item',
+		layoutMode: 'masonry',
+		stagger: 30,
+		percentPosition: true,
+		resizable: false,
+		masonry: {
+				columnWidth: '.grid-sizer',
+		}
+	};
+
+	$grid = $('.grid').isotope(isoOptions);
+
+
 	$(function(){
 		contentWayPoint();
-		//isotopeImageLoaded();
 		toggleAside();
 		initCategories();
 		buttonsCustom();
 		initWaypoint();
-		//请求照片
-		// fetchPage(0);
 	});
 
 
