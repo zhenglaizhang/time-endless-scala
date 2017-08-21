@@ -21,6 +21,10 @@ jar {
     version = '0.3.3'
 }
 
+springBoot {
+    mainClass = 'com.lianji.te.Application'
+}
+
 repositories {
     mavenCentral()
     jcenter()
