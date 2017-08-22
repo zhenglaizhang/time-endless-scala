@@ -15,6 +15,9 @@ class SecurityConfig @Autowired()() extends WebSecurityConfigurerAdapter {
   override protected def configure(http: HttpSecurity): Unit = {
     http.authorizeRequests()
       .antMatchers("/", "/home").permitAll()
-//      .anyRequest().authenticated()
+      .anyRequest().authenticated()
+    .and()
+      .antMatcher("/photos")
+      .httpBasic()
   }
 }
