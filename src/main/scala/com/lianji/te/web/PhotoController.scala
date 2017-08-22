@@ -10,6 +10,7 @@ import com.lianji.te.domain.{Category, Pager, Photo}
 import com.lianji.te.service.{OssService, PhotoMetadataService, PhotoRepository, PhotoService}
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.mobile.device.Device
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
@@ -40,6 +41,15 @@ class PhotoController @Autowired()(
   import org.springframework.data.domain.PageRequest
   import org.springframework.web.bind.annotation.RequestParam
   import org.springframework.web.servlet.ModelAndView
+
+  @ResponseBody
+  @RequestMapping(Array("/detect-device"))
+  def detectDevice(device: Device): String = {
+    if (device.isMobile) "mobile"
+    else if (device.isTablet) "tablet"
+    else if (device.isNormal) "normal"
+    else "unknown"
+  }
 
   @GetMapping(Array("/view"))
   def showPersonsPage(
@@ -108,22 +118,34 @@ class PhotoController @Autowired()(
     log.info("creating photo with request = {}", req)
     val photo = photoMetaService
       .getPhoto(req.category, req.name, req.description, url = "dummy", req.file.getInputStream)
-    val savedPhoto = photoRepository.save(photo)
-    val sizedInputStream = photoMetaService.crapImgInputStream(req.file.getInputStream, 1920)
     val oss = new OssService(endpoint, id, secret)
     oss.setBucketPublicReadable(bucket)
+    val savedPhoto = photoRepository.save(photo)
 
-    // upload img
+    // pc img
+    val sizedInputStream = photoMetaService.crapImgInputStream(req.file.getInputStream, 1920)
     val key = s"${req.category.get(0).name}/${savedPhoto.id}.jpg"
     oss.uploadJpg(bucket, key, sizedInputStream)
 
-    // upload index
+    // pc index
     val key_index = s"${req.category.get(0).name}/${savedPhoto.id}_index.jpg"
-    val sizedIndex = photoMetaService.crapImgInputStream(req.index.getInputStream, 960)
+    val sizedIndex = photoMetaService.crapImgInputStream(req.index.getInputStream, 720)
     oss.uploadJpg(bucket, key_index, sizedIndex)
+
+    // mobile img
+    val sizedInputStreamMobile = photoMetaService.crapImgInputStream(req.file.getInputStream, 960)
+    val keyMobile = s"${req.category.get(0).name}/${savedPhoto.id}_mobile.jpg"
+    oss.uploadJpg(bucket, keyMobile, sizedInputStreamMobile)
+
+    // pc index
+    val keyIndexMobile = s"${req.category.get(0).name}/${savedPhoto.id}_mobile_index.jpg"
+    val sizedIndexMobile = photoMetaService.crapImgInputStream(req.index.getInputStream, 480)
+    oss.uploadJpg(bucket, keyIndexMobile, sizedIndexMobile)
 
     photo.url = s"http://$bucket.$endpoint/$key"
     photo.url_index = s"http://$bucket.$endpoint/$key_index"
+    photo.url_mobile = s"http://$bucket.$endpoint/$keyMobile"
+    photo.url_mobile_index = s"http://$bucket.$endpoint/$keyIndexMobile"
     photoRepository.save(photo)
     "redirect:/photos"
   }
