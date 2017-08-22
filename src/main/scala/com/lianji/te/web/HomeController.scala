@@ -4,11 +4,15 @@ import java.io.{File, IOException}
 import java.nio.file.Files
 import java.util.Optional
 
+import com.lianji.te.domain.Category
 import com.lianji.te.service.PhotoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation._
+import org.springframework.web.servlet.ModelAndView
+
+import scala.util.Try
 
 @Controller
 class HomeController {
@@ -17,11 +21,16 @@ class HomeController {
   private var photoRepository: PhotoRepository = _
 
   @GetMapping(Array("/"))
-  def index(model: Model, @RequestParam("category") category: Optional[String]) = {
+  def index(@RequestParam("category") category: Optional[String]) = {
+    val mv = new ModelAndView("index")
     if (category.isPresent) {
-      model.addAttribute("category", category.get())
+      Try {
+        Category.valueOf(category.get())
+      }.toOption.foreach { _ =>
+        mv.addObject("category", category.get())
+      }
     }
-    "index"
+    mv
   }
 
   @RequestMapping(value = Array("/image/{category}/{name}"))
