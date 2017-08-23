@@ -218,13 +218,13 @@
 
 	}
 
-
 	var initCategories = function() {
-
+		var defaultCategory = $('#redirect').text().trim();
+		if(!categories.includes(defaultCategory))
+			defaultCategory = 'All';
 		//页面首次加载时调用，生成分类列表
 		categories.map(function(cur, idx) {
-			var currentCategory = 'All';
-			var css = cur == currentCategory ? 'currentCategory' : 'otherCategory';
+			var css = cur == defaultCategory ? 'currentCategory' : 'otherCategory';
 			$('#categoryContainer').append(
 				"<div class='category_wrapper' style='z-index:" + (99 - idx) +" ; top: 20px;'><div class='category btn-circle " + css + "'><a href='#'><span></span><em>" + cur + "</em></a></div></div>"
 			);
@@ -308,6 +308,15 @@
 
 	function getPhotoDiv(category, smallUrl, largeUrl, name, description) {
 		var categoryValue = category.split(',').join(' ');
+		// return "\
+		// <div class='grid-photo grid-item item animate-box " + categoryValue + "data-photo='" + category + "'>\
+		// 			    <a href='" + largeUrl + "' class='image-popup' title='" + name + "'>\
+		// 			        <div class='img-wrap'>\
+		// 			            <img src='" + smallUrl + "' alt='' class='img-responsive'>\
+		// 			        </div>\
+		// 					</a>\
+		// 				</div>\
+		// "
 		return "\
 		<div class='grid-photo grid-item item animate-box fadeIn animated-fast " + categoryValue + "' data-animate-effect='fadeIn' data-photo='" + category + "'>\
 					    <a href='" + largeUrl + "' class='image-popup' title='" + name + "'>\
@@ -371,27 +380,21 @@
 			for(var i=0; i< contents.length; i++) {
 				content = contents[i];
 				photoDiv = getPhotoDiv(content.category, content.url_index, content.url, content.name, content.description);
-				$photoDiv = $(photoDiv);
-				$('.grid').append(photoDiv);//.isotope( 'appended', $photoDiv );
+				$('.grid').append(photoDiv);
 			}
 			//对所有元素设置popup
 			magnifPopup();
 
-			$('.grid').imagesLoaded().progress(function () {
+			$('.grid').imagesLoaded().progress(function (instance, image) {
 				//新数据到达后，重新构建isotope
 				$('.grid').isotope('destroy');
 				$grid = $('.grid').isotope(isoOptions);
-				//过滤元素
-				var currentCategory = $('.currentCategory a span').text();
-				var filter;
-				if(currentCategory == 'All')
-					filter = "*";
-				else {
-					filter = "." + currentCategory;
-				}
-				$grid.isotope({filter: filter});
+
 	    }).always(function(){
 				imageLoaded = true;
+				if (getCurrentCategory() != 'All') {
+					changePhoto(getCurrentCategory());
+				}
 			});
 
 			currentPageIdx += 1;
@@ -418,6 +421,22 @@
 		})
 	}
 
+
+	function getCurrentCategory() {
+			return $('.currentCategory a span').text();
+	}
+
+	function getFilterName() {
+		var currentCategory = $('.currentCategory a span').text();
+		var filter;
+		if(currentCategory == 'All')
+			filter = "*";
+		else {
+			filter = "." + currentCategory;
+		}
+		return filter;
+	}
+
 	var isoOptions = {
 		itemSelector: '.grid-item',
 		layoutMode: 'masonry',
@@ -439,6 +458,4 @@
 		buttonsCustom();
 		initWaypoint();
 	});
-
-
 }());
