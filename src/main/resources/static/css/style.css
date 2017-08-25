@@ -522,4 +522,16 @@ h1, h2, h3, h4, h5, h6, figure {
   opacity: 0;
 }
 
+.social-share .social-share-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.my-social-share {
+  position: absolute;
+  right: 0;
+}
+
 /*# sourceMappingURL=style.css.map */

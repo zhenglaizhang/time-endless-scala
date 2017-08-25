@@ -354,10 +354,43 @@
 					preload: [0,1] // Will preload 0 - before current, and 1 after the current image
 				},
 				image: {
-					tError: 'The image could not be loaded.',
-					titleSrc: function(item) {
+				  markup: '<div class="mfp-figure">'+
+				            '<div class="mfp-close"></div>'+
+				            '<div class="mfp-img"></div>'+
+				            '<div class="mfp-bottom-bar">'+
+				              '<div class="mfp-title"></div>'+
+				              '<div class="mfp-counter"></div>'+
+				            '</div>'+
+				          '</div>', // Popup HTML markup. `.mfp-img` div will be replaced with img tag, `.mfp-close` by close button
+
+				  cursor: 'mfp-zoom-out-cur', // Class that adds zoom cursor, will be added to body. Set to null to disable zoom out cursor.
+
+				  titleSrc: function(item) {
 						return item.el.attr('title');
-					}
+					},
+
+				  verticalFit: true, // Fits image in area vertically
+
+				  tError: '<a href="%url%">The image</a> could not be loaded.' // Error message
+				},
+				callbacks: {
+					open: function(){
+						$('.mfp-bottom-bar').append('<div class="my-social-share"></div>');
+						var $config = {
+							image: $('.mfp-img').attr('src'),
+							sites: ['qq', 'weibo','wechat', 'facebook', 'twitter']
+					  };
+						$('.my-social-share').share($config);
+					},
+					imageLoadComplete: function() {
+						$('.my-social-share').remove();
+						$('.mfp-bottom-bar').append('<div class="my-social-share"></div>');
+						var $config = {
+							image: $('.mfp-img').attr('src'),
+							sites: ['qq', 'weibo','wechat', 'facebook', 'twitter']
+					  };
+						$('.my-social-share').share($config);
+			  	},
 				}
 			});
 		};
