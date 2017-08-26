@@ -329,6 +329,48 @@
 	}
 
 
+	function copyToClipboard(copyContent) {
+	    var $temp = $("<input>");
+	    $(".mfp-content").append($temp);
+	    $temp.val(copyContent).select();
+	    var succeed =document.execCommand("copy");
+	    $temp.remove();
+			return succeed;
+	}
+
+	function setupShareBottom() {
+		var $config = {
+			image: $('.mfp-img').attr('src'),
+			sites: ['wechat', 'weibo', 'facebook', 'twitter']
+		};
+
+		var shareBar =
+		'<div class="my-social-share" data-mode="prepend">' +
+			'<a href="javascript:;" class="social-share-icon icon-envelope" style="font-family: icomoon !important;"></a>' +
+			'<a href="javascript:;" class="social-share-icon icon-link" style="font-family: icomoon !important;"></a>' +
+		'</div>';
+
+		$('.mfp-bottom-bar').append(shareBar);
+		$('.my-social-share').share($config);
+		$('.icon-envelope').click(function(){
+			var imgUrl = $(this).parent().parent().parent().find('img').attr('src');
+			var subject = 'beautiful image';
+			var body = imgUrl;
+			var hrefValue = 'mailto:?Subject='+ subject +'&body=' + body;
+			$(this).attr('href', hrefValue);
+			$(this).click();
+		});
+		$('.icon-link').click(function(){
+			var imgUrl = $(this).parent().parent().parent().find('img').attr('src');
+			var succeed = copyToClipboard(imgUrl);
+			if(succeed)
+				alert('already copy image url to clipboard: \n' + imgUrl);
+			else {
+				alert('failed to copy image url to clipboard ');
+			}
+		});
+	}
+
 	  // MagnificPopup
 		var magnifPopup = function() {
 			$('.image-popup').filter(function(index){
@@ -374,22 +416,12 @@
 				  tError: '<a href="%url%">The image</a> could not be loaded.' // Error message
 				},
 				callbacks: {
-					open: function(){
-						$('.mfp-bottom-bar').append('<div class="my-social-share"></div>');
-						var $config = {
-							image: $('.mfp-img').attr('src'),
-							sites: ['qq', 'weibo','wechat', 'facebook', 'twitter']
-					  };
-						$('.my-social-share').share($config);
+					open: function() {
+						setupShareBottom();
 					},
 					imageLoadComplete: function() {
 						$('.my-social-share').remove();
-						$('.mfp-bottom-bar').append('<div class="my-social-share"></div>');
-						var $config = {
-							image: $('.mfp-img').attr('src'),
-							sites: ['qq', 'weibo','wechat', 'facebook', 'twitter']
-					  };
-						$('.my-social-share').share($config);
+						setupShareBottom();
 			  	},
 				}
 			});
