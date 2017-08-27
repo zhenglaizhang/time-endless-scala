@@ -346,7 +346,7 @@
 
 		var shareBar =
 		'<div class="my-social-share" data-mode="prepend">' +
-			'<a href="javascript:;" class="social-share-icon icon-envelope" style="font-family: icomoon !important;"></a>' +
+			'<a href="javascript:;" class="social-share-icon icon-envelope" style="font-family: icomoon !important; color: #dc143c"></a>' +
 			'<a href="javascript:;" class="social-share-icon icon-link" style="font-family: icomoon !important;"></a>' +
 		'</div>';
 
