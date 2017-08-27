@@ -1,13 +1,14 @@
 package com.lianji.te.service
 
 import java.awt.image.BufferedImage
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream, OutputStream}
 import javax.imageio.ImageIO
-import scala.collection.JavaConverters._
 
+import scala.collection.JavaConverters._
 import com.drew.imaging.ImageMetadataReader
-import com.drew.metadata.exif.{ExifDirectoryBase, ExifIFD0Directory, ExifSubIFDDescriptor, ExifSubIFDDirectory}
+import com.drew.metadata.exif._
 import com.lianji.te.domain.{Category, Photo}
+import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter
 import org.imgscalr.Scalr
 import org.imgscalr.Scalr._
 import org.springframework.stereotype.Service
@@ -78,7 +79,9 @@ class PhotoMetadataService {
   def crapImgInputStream(inputStream: InputStream, size: Int): ByteArrayInputStream = {
     val img = resize(inputStream, size)
     val os = new ByteArrayOutputStream()
-    ImageIO.write(img, "gif", os)
+//    new ExifRewriter()
+//      .removeExifMetadata(inputStream, os)
+    ImageIO.write(img, "jpg", os)
     new ByteArrayInputStream(os.toByteArray)
   }
 
@@ -87,7 +90,14 @@ class PhotoMetadataService {
   }
 
   def resize(img: BufferedImage, size: Int): BufferedImage = {
-    Scalr.resize(img, size)
+    Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, size, size)
+  }
+
+  def removeExif(inputStream: InputStream): ByteArrayInputStream = {
+    val outputStream = new ByteArrayOutputStream()
+    new ExifRewriter()
+      .removeExifMetadata(inputStream, outputStream)
+    new ByteArrayInputStream(outputStream.toByteArray)
   }
 
   def createThumbnail(img: BufferedImage): BufferedImage = {
