@@ -122,6 +122,8 @@ class PhotoController @Autowired()(
     oss.setBucketPublicReadable(bucket)
     val savedPhoto = photoRepository.save(photo)
 
+//    val imgOnlyInputStream = photoMetaService.removeExif(req.file.getInputStream)
+
     // pc img
     val sizedInputStream = photoMetaService.crapImgInputStream(req.file.getInputStream, 1920)
     val key = s"${req.category.get(0).name}/${savedPhoto.id}.jpg"
@@ -129,7 +131,7 @@ class PhotoController @Autowired()(
 
     // pc index
     val key_index = s"${req.category.get(0).name}/${savedPhoto.id}_index.jpg"
-    val sizedIndex = photoMetaService.crapImgInputStream(req.index.getInputStream, 720)
+    val sizedIndex = photoMetaService.crapImgInputStream(req.file.getInputStream, 720)
     oss.uploadJpg(bucket, key_index, sizedIndex)
 
     // mobile img
@@ -139,7 +141,7 @@ class PhotoController @Autowired()(
 
     // pc index
     val keyIndexMobile = s"${req.category.get(0).name}/${savedPhoto.id}_mobile_index.jpg"
-    val sizedIndexMobile = photoMetaService.crapImgInputStream(req.index.getInputStream, 480)
+    val sizedIndexMobile = photoMetaService.crapImgInputStream(req.file.getInputStream, 480)
     oss.uploadJpg(bucket, keyIndexMobile, sizedIndexMobile)
 
     photo.url = s"http://$bucket.$endpoint/$key"
