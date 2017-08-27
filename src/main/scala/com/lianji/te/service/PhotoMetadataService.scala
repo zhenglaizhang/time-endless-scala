@@ -87,7 +87,7 @@ class PhotoMetadataService {
   }
 
   def resize(img: BufferedImage, size: Int): BufferedImage = {
-    Scalr.resize(img, size)
+    Scalr.resize(img, Method.ULTRA_QUALITY, Mode.AUTOMATIC, size, size);
   }
 
   def createThumbnail(img: BufferedImage): BufferedImage = {
