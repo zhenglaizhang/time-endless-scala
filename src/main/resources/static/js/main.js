@@ -460,6 +460,7 @@
 				if (getCurrentCategory() != 'All') {
 					changePhoto(getCurrentCategory());
 				}
+				Waypoint.refreshAll();
 			});
 
 			currentPageIdx += 1;
