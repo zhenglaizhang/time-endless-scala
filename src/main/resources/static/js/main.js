@@ -451,10 +451,11 @@
 			magnifPopup();
 
 			$('.grid').imagesLoaded().progress(function (instance, image) {
+				var scrollTop = document.body.scrollTop;
 				//新数据到达后，重新构建isotope
 				$('.grid').isotope('destroy');
 				$grid = $('.grid').isotope(isoOptions);
-
+				window.scrollTo(0, scrollTop);
 	    }).always(function(){
 				imageLoaded = true;
 				if (getCurrentCategory() != 'All') {
@@ -477,7 +478,7 @@
 		$('.bottom').waypoint({
 			handler: function(direction) {
 				console.log('bottom reached!');
-				if(hasMore && !isFetching) {
+				if(direction == 'down' && hasMore && !isFetching) {
 					isFetching = true;
 					imageLoaded = false;
 					fetchPage(currentPageIdx + 1);
