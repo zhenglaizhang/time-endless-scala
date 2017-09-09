@@ -117,13 +117,10 @@ class PhotoController @Autowired()(
   def createForm(@ModelAttribute @Valid req: PhotoRequest, httpServletRequest: HttpServletRequest): String = {
     log.info("creating photo with request = {}", req)
 
-    // use original file name as photo name
-    val imgName = req.file.getOriginalFilename.substring(0, req.file.getOriginalFilename.indexOf('.'));
-    req.setName(imgName)
-
-    if (photoRepository.findByName(req.name).iterator().hasNext) {
-      return "redirect:/photos"
+    if (photoRepository.findByName(req.getName).iterator().hasNext) {
+      return "redirect:/photos";
     }
+
 
     val photo = photoMetaService
       .getPhoto(req.category, req.name, req.description, url = "dummy", req.file.getInputStream)
@@ -131,23 +128,25 @@ class PhotoController @Autowired()(
     oss.setBucketPublicReadable(bucket)
     val savedPhoto = photoRepository.save(photo)
 
+    //    val imgOnlyInputStream = photoMetaService.removeExif(req.file.getInputStream)
+
     // pc img
     val sizedInputStream = photoMetaService.crapImgInputStream(req.file.getInputStream, 1920)
-    val key = s"${req.category.get(0).name}/${imgName}.jpg"
+    val key = s"${req.category.get(0).name}/${savedPhoto.name}.jpg"
     oss.uploadJpg(bucket, key, sizedInputStream)
 
     // pc index
-    val key_index = s"${req.category.get(0).name}/${imgName}_index.jpg"
+    val key_index = s"${req.category.get(0).name}/${savedPhoto.name}_index.jpg"
     val sizedIndex = photoMetaService.crapImgInputStream(req.index.getInputStream, 720)
     oss.uploadJpg(bucket, key_index, sizedIndex)
 
     // mobile img
     val sizedInputStreamMobile = photoMetaService.crapImgInputStream(req.file.getInputStream, 960)
-    val keyMobile = s"${req.category.get(0).name}/mobile/${imgName}.jpg"
+    val keyMobile = s"${req.category.get(0).name}/mobile/${savedPhoto.name}.jpg"
     oss.uploadJpg(bucket, keyMobile, sizedInputStreamMobile)
 
     // mobile index
-    val keyIndexMobile = s"${req.category.get(0).name}/mobile/${imgName}_index.jpg"
+    val keyIndexMobile = s"${req.category.get(0).name}/mobile/${savedPhoto.name}_index.jpg"
     val sizedIndexMobile = photoMetaService.crapImgInputStream(req.index.getInputStream, 480)
     oss.uploadJpg(bucket, keyIndexMobile, sizedIndexMobile)
 

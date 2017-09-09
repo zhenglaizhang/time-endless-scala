@@ -6,6 +6,7 @@ plugins {
 }
 
 apply plugin: 'java'
+apply plugin: 'war'
 apply plugin: 'application'
 apply plugin: 'scala'
 //apply plugin: 'eclipse'
@@ -16,9 +17,9 @@ ext {
     targetCompatibility = 1.8
 }
 
-jar {
+war {
     baseName = 'time-endless-app'
-    version = '0.3.3'
+    version = '0.3.4'
 }
 
 springBoot {
@@ -76,10 +77,10 @@ dependencies {
     compile group: 'org.webjars', name: 'jquery', version: '3.2.1'
 
     compile group: 'com.aliyun.oss', name: 'aliyun-sdk-oss', version: '2.6.1'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
     // for demo purpose only, just include dependency only
     // Gradle actually creates a separate artifact JAR for us but we don’t have to publish it anywhere
     // On the inclusion of the jar in the application classpath, the DbCountRunner bean will be created automatically and added to the application context.
-    compile project(':db-count-starter')
 
 }

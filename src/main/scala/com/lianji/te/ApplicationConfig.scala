@@ -1,11 +1,10 @@
 package com.lianji.te
 
-import com.lianji.dbcount.EnableDbCounting
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.annotation.{ Bean, Profile }
+import org.springframework.context.annotation.{Bean, Profile}
 import org.springframework.scheduling.annotation.EnableScheduling
 
 //@Configuration // the annotated class contains Spring configuration definitions such as the @Bean, @Component, and @Service declarations
@@ -33,7 +32,6 @@ applied only if a corresponding Profile gets activated.
 
 @SpringBootApplication
 @EnableScheduling
-@EnableDbCounting
 class ApplicationConfig {
   @Bean
   @Profile(Array("logger", "!prod"))

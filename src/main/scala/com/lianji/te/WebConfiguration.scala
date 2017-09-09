@@ -5,23 +5,21 @@ import java.lang.Boolean
 import java.util.concurrent.TimeUnit
 import javax.servlet.Filter
 
-import scala.beans.BeanProperty
-
-import com.lianji.dbcount.{ DbCountRunner, EnableDbCounting }
 import com.lianji.te.domain.BookFormatter
 import com.lianji.te.service.BookRepository
 import org.apache.catalina.connector.Connector
 import org.apache.catalina.filters.RemoteIpFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory
-import org.springframework.boot.context.embedded.{ ConfigurableEmbeddedServletContainer, EmbeddedServletContainerCustomizer }
-import org.springframework.boot.context.properties.{ ConfigurationProperties, EnableConfigurationProperties }
-import org.springframework.context.annotation.{ Bean, Configuration, PropertySource }
-import org.springframework.data.repository.CrudRepository
+import org.springframework.boot.context.embedded.{ConfigurableEmbeddedServletContainer, EmbeddedServletContainerCustomizer}
+import org.springframework.boot.context.properties.{ConfigurationProperties, EnableConfigurationProperties}
+import org.springframework.context.annotation.{Bean, Configuration, PropertySource}
 import org.springframework.format.FormatterRegistry
 import org.springframework.http.converter.ByteArrayHttpMessageConverter
-import org.springframework.web.servlet.config.annotation.{ InterceptorRegistry, PathMatchConfigurer, ResourceHandlerRegistry, WebMvcConfigurerAdapter }
+import org.springframework.web.servlet.config.annotation.{InterceptorRegistry, PathMatchConfigurer, ResourceHandlerRegistry, WebMvcConfigurerAdapter}
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
+
+import scala.beans.BeanProperty
 
 /*
  Spring Boot automatically adds OrderedCharacterEncodingFilter and HiddenHttpMethodFilter
