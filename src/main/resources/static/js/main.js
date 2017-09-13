@@ -309,21 +309,20 @@
 
 	function getPhotoDiv(category, smallUrl, largeUrl, name, description) {
 		var categoryValue = category.split(',').join(' ');
-		// return "\
-		// <div class='grid-photo grid-item item animate-box " + categoryValue + "data-photo='" + category + "'>\
-		// 			    <a href='" + largeUrl + "' class='image-popup' title='" + name + "'>\
-		// 			        <div class='img-wrap'>\
-		// 			            <img src='" + smallUrl + "' alt='' class='img-responsive'>\
-		// 			        </div>\
-		// 					</a>\
-		// 				</div>\
-		// "
 		return "\
 		<div class='grid-photo grid-item item animate-box fadeIn animated-fast " + categoryValue + "' data-animate-effect='fadeIn' data-photo='" + category + "'>\
 					    <a href='" + largeUrl + "' class='image-popup' title='" + name + "'>\
 					        <div class='img-wrap'>\
 					            <img src='" + smallUrl + "' alt='' class='img-responsive'>\
 					        </div>\
+									<div class='text-wrap'>\
+	                    <div class=''>\
+	                        <div>\
+	                            <h2></h2>\
+	                            <span></span>\
+	                        </div>\
+	                    </div>\
+	                </div>\
 							</a>\
 						</div>\
 		"
