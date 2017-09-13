@@ -299,7 +299,8 @@
 											setTimeout(function () {
 													el.addClass('fadeIn animated-fast');
 													magnifPopup();
-											}, k * 50, 'easeInOutExpo');
+													Waypoint.refreshAll();
+											}, 50, 'easeInOutExpo');
 									}
 							});
 					}, 50);
@@ -451,17 +452,17 @@
 			magnifPopup();
 
 			$('.grid').imagesLoaded().progress(function (instance, image) {
-				var scrollTop = document.body.scrollTop;
+				var scrollTopValue= $(document).scrollTop();
 				//新数据到达后，重新构建isotope
 				$('.grid').isotope('destroy');
 				$grid = $('.grid').isotope(isoOptions);
-				window.scrollTo(0, scrollTop);
+
+				$(document).scrollTop(scrollTopValue);
 	    }).always(function(){
 				imageLoaded = true;
 				if (getCurrentCategory() != 'All') {
 					changePhoto(getCurrentCategory());
 				}
-				Waypoint.refreshAll();
 			});
 
 			currentPageIdx += 1;
