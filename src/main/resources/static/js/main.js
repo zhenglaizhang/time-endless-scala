@@ -459,9 +459,12 @@
 				$(document).scrollTop(scrollTopValue);
 	    }).always(function(){
 				imageLoaded = true;
-				if (getCurrentCategory() != 'All') {
+				if (getCurrentCategory() == 'All') {
+					Waypoint.refreshAll();
+				}else {
 					changePhoto(getCurrentCategory());
 				}
+
 			});
 
 			currentPageIdx += 1;
