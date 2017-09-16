@@ -243,12 +243,12 @@
 			event.preventDefault();
 			if (state == 'expanding' || state == 'collapsing')
 				return;
-			if (state == 'collapased') { //收起状态
+			if (state == 'collapased') { //收起状��?
 				state = 'expanding';
 				expandAnimation();
 				return;
 			}
-			if (state == 'expanded') {//打开状态
+			if (state == 'expanded') {//打开状��?
 				state = 'collapsing';
 				collapseAnimation();
 				return;
@@ -260,7 +260,7 @@
 				case 'expanding':
 				case 'collapsing':
 						return;
-				case 'collapased'://这种情况不应该发生
+				case 'collapased'://这种情况不应该发��?
 						console.log('should not happen');
 						return;
 				case 'expanded':
@@ -329,14 +329,14 @@
 	}
 
 
-	function copyToClipboard(copyContent) {
-	    var $temp = $("<input>");
-	    $(".mfp-content").append($temp);
-	    $temp.val(copyContent).select();
-	    var succeed =document.execCommand("copy");
-	    $temp.remove();
-			return succeed;
-	}
+	// function copyToClipboard(copyContent) {
+	//     var $temp = $("<input>");
+	//     $(".mfp-content").append($temp);
+	//     $temp.val(copyContent).select();
+	//     var succeed =document.execCommand("copy");
+	//     $temp.remove();
+	// 		return succeed;
+	// }
 
 	function setupShareBottom() {
 		var $config = {
@@ -347,11 +347,14 @@
 		var shareBar =
 		'<div class="my-social-share" data-mode="prepend">' +
 			'<a href="javascript:;" class="social-share-icon icon-envelope" style="font-family: icomoon !important; color: #dc143c"></a>' +
-			'<a href="javascript:;" class="social-share-icon icon-link" style="font-family: icomoon !important;"></a>' +
+			'<a href="javascript:;" class="social-share-icon icon-link" data-clipboard-target="#currentImgUrl" style="font-family: icomoon !important;"></a>' +
 		'</div>';
+
+
 
 		$('.mfp-bottom-bar').append(shareBar);
 		$('.my-social-share').share($config);
+
 		$('.icon-envelope').click(function(){
 			var imgUrl = $(this).parent().parent().parent().find('img').attr('src');
 			var subject = 'beautiful image';
@@ -360,15 +363,24 @@
 			$(this).attr('href', hrefValue);
 			$(this).click();
 		});
+
 		$('.icon-link').click(function(){
-			var imgUrl = $(this).parent().parent().parent().find('img').attr('src');
-			var succeed = copyToClipboard(imgUrl);
-			if(succeed)
-				alert('already copy image url to clipboard: \n' + imgUrl);
-			else {
+			var imgUrl = $('.mfp-img').attr('src');
+			var $temp = $("<input id='currentImgUrl'>");
+			$temp.attr('value', imgUrl);
+			$(".mfp-content").append($temp);
+
+			var clipboard = new Clipboard('.icon-link');
+			clipboard.on('success', function(e) {
+				alert('already copy image url to clipboard');
+				$('#currentImgUrl').remove();
+			});
+			clipboard.on('error', function(e) {
 				alert('failed to copy image url to clipboard ');
-			}
+				$('#currentImgUrl').remove();
+			});
 		});
+
 	}
 
 	  // MagnificPopup
